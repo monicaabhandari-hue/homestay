@@ -373,7 +373,7 @@ p  { margin: 0 0 1rem; }
 .room-card {
   background: var(--ivory); position: relative; overflow: hidden;
   border: 1px solid rgba(30,58,95,.1);
-  border-radius: 8px; overflow: hidden;
+  border-radius: 8px;
   box-shadow: 0 2px 20px rgba(10,22,40,.08);
   transition: transform .45s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow .45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
@@ -433,7 +433,7 @@ p  { margin: 0 0 1rem; }
 }
 .experience-tile {
   position: relative; overflow: hidden; min-height: 340px; cursor: pointer;
-  border-radius: 6px; overflow: hidden;
+  border-radius: 6px;
   transition: transform .45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
   backface-visibility: hidden;
@@ -533,7 +533,7 @@ p  { margin: 0 0 1rem; }
 }
 .gallery-item {
   margin: 0; overflow: hidden; cursor: pointer; position: relative;
-  border-radius: 4px; overflow: hidden;
+  border-radius: 4px;
   transition: transform .4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
   backface-visibility: hidden;
