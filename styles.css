@@ -74,8 +74,8 @@ a   { color: inherit; text-decoration: none; transition: var(--transition); }
 
 .eyebrow {
   font-family: var(--font-body);
-  font-weight: 400;
-  font-size: 0.78rem;
+  font-weight: 500;
+  font-size: 0.85rem;
   letter-spacing: 0.4em;
   text-transform: uppercase;
   color: var(--amber);
@@ -94,13 +94,13 @@ a   { color: inherit; text-decoration: none; transition: var(--transition); }
 .section-heading h2 {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-size: clamp(2.5rem, 5.5vw, 4.2rem);
   color: var(--indigo);
   line-height: 1.05;
 }
 
 h1, h2, h3 { font-family: var(--font-display); line-height: 1.1; }
-h3 { font-size: 1.4rem; font-weight: 600; color: var(--violet); }
+h3 { font-size: 1.7rem; font-weight: 600; color: var(--violet); }
 p  { margin: 0 0 1rem; }
 
 /* ── Buttons ── */
@@ -160,7 +160,7 @@ p  { margin: 0 0 1rem; }
 
 .brand {
   font-family: var(--font-display); font-weight: 300;
-  font-size: 1.3rem; color: var(--parch); letter-spacing: 0.04em;
+  font-size: 1.6rem; color: var(--parch); letter-spacing: 0.04em;
 }
 .brand em { font-style: italic; color: var(--amber); }
 
@@ -170,11 +170,11 @@ p  { margin: 0 0 1rem; }
 }
 .nav-menu a {
   font-family: var(--font-body); font-weight: 500;
-  font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase;
+  font-size: 0.92rem; letter-spacing: 0.2em; text-transform: uppercase;
   cursor: pointer;
-  color: rgba(245,236,215,.7);
+  color: rgba(255,255,255,.95);
 }
-.nav-menu a:hover { color: var(--amber); }
+.nav-menu a:hover { color: var(--gold); }
 
 .nav-toggle {
   display: none; width: 40px; height: 40px;
@@ -403,11 +403,11 @@ p  { margin: 0 0 1rem; }
   padding: 5px 12px;
 }
 .room-content { padding: 1.6rem; border-top: 1px solid rgba(30,58,95,.08); }
-.room-content h3 { font-size: 1.5rem; font-weight: 300; margin-bottom: .5rem; color: var(--violet); }
-.room-content p  { font-size: .88rem; color: #3a4560; font-weight: 300; margin-bottom: 1.2rem; }
+.room-content h3 { font-size: 1.8rem; font-weight: 600; margin-bottom: .5rem; color: var(--violet); }
+.room-content p  { font-size: 1rem; color: #3a4560; font-weight: 400; margin-bottom: 1.2rem; }
 .price {
   font-family: var(--font-display); font-weight: 400;
-  font-size: 1.3rem; color: var(--clay); margin-bottom: 1.2rem !important;
+  font-size: 1.5rem; color: var(--clay); margin-bottom: 1.2rem !important;
 }
 
 /* ================================================================
@@ -433,7 +433,7 @@ p  { margin: 0 0 1rem; }
   transform-style: preserve-3d;
 }
 .experience-tile {
-  position: relative; overflow: hidden; min-height: 340px; cursor: pointer;
+  position: relative; overflow: hidden; min-height: 420px; cursor: pointer;
   border-radius: 6px;
   transition: transform .45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
@@ -443,21 +443,21 @@ p  { margin: 0 0 1rem; }
 .experience-tile img {
   width: 100%; height: 100%; object-fit: cover;
   transition: transform .7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  filter: brightness(.8) saturate(.9);
+  filter: brightness(.95) saturate(1);
 }
-.experience-tile:hover img { transform: scale(1.09); filter: brightness(.45) saturate(1); }
+.experience-tile:hover img { transform: scale(1.09); filter: brightness(.7) saturate(1); }
 .experience-tile:hover {
   transform: scale(1.03) translateZ(15px);
 }
 .experience-tile .overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(10,22,40,.94) 0%, rgba(10,22,40,.3) 50%, transparent 100%);
+  background: linear-gradient(to top, rgba(10,22,40,.85) 0%, rgba(10,22,40,.55) 40%, rgba(10,22,40,.2) 70%, transparent 100%);
   display: flex; flex-direction: column; justify-content: flex-end;
   padding: 1.6rem; transition: var(--transition);
 }
-.experience-tile h3 { color: var(--parch); font-weight: 300; font-size: 1.3rem; margin-bottom: .4rem; }
+.experience-tile h3 { color: #ffffff; font-weight: 600; font-size: 1.6rem; margin-bottom: .4rem; }
 .experience-tile p {
-  color: rgba(232,240,248,.7); font-size: .85rem; font-weight: 200;
+  color: #ffffff; font-size: 1rem; font-weight: 400;
   opacity: 1; transform: translateY(0);
   transition: opacity .35s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform .35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   margin: 0;
@@ -467,8 +467,8 @@ p  { margin: 0 0 1rem; }
 .experience-tile.touch-visible p { opacity: 1; transform: translateY(0); }
 .exp-num {
   position: absolute; top: 18px; left: 18px;
-  font-family: var(--font-display); font-size: 3rem; font-weight: 300;
-  color: rgba(232,148,58,.3); line-height: 1; pointer-events: none;
+  font-family: var(--font-display); font-size: 3.5rem; font-weight: 300;
+  color: rgba(232,148,58,.6); line-height: 1; pointer-events: none;
 }
 
 /* ================================================================
@@ -508,7 +508,7 @@ p  { margin: 0 0 1rem; }
 .form-message { margin-top: 1rem; color: var(--violet); font-size: .85rem; font-weight: 300; min-height: 1.4em; }
 
 .contact-info { background: var(--indigo); padding: 2.4rem; color: var(--fog); border-radius: 10px; }
-.contact-info h3 { color: var(--parch); font-weight: 300; margin-bottom: 1.2rem; }
+.contact-info h3 { color: var(--parch); font-weight: 600; margin-bottom: 1.2rem; }
 .contact-info p  { font-size: .88rem; font-weight: 200; color: rgba(232,240,248,.7); margin-bottom: .6rem; }
 .contact-info a  { color: var(--amber); }
 .contact-info iframe {
@@ -641,10 +641,10 @@ p  { margin: 0 0 1rem; }
 }
 .footer-brand { font-family: var(--font-display); font-weight: 300; font-size: 1.15rem; color: var(--parch); margin: 0; }
 .footer-links { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; justify-content: center; }
-.footer-links a { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 300; color: rgba(232,240,248,.45); }
+.footer-links a { font-size: .82rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 300; color: rgba(232,240,248,.7); }
 .footer-links a:hover { color: var(--amber); }
 .social-links { display: flex; justify-content: flex-end; gap: 1rem; }
-.social-links a { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 300; color: rgba(232,240,248,.45); }
+.social-links a { font-size: .82rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 300; color: rgba(232,240,248,.7); }
 .social-links a:hover { color: var(--amber); }
 .footer-bottom { border-top: 1px solid rgba(240,192,96,.08); padding: 1rem 0 1.6rem; font-size: .76rem; font-weight: 200; color: rgba(232,240,248,.3); }
 .footer-bottom p { margin: 0; }
