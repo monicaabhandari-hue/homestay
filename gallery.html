@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery | Mist &amp; Maple Homestay</title>
+    <meta name="description" content="Photo gallery of Mist &amp; Maple Homestay in Ravangla, Sikkim." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+    <header class="site-header">
+      <nav class="site-nav solid" aria-label="Primary navigation">
+        <a class="brand" href="index.html">Mist &amp; <em>Maple</em></a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+          <span class="sr-only">Toggle navigation</span>
+          <span></span><span></span><span></span>
+        </button>
+        <ul id="nav-menu" class="nav-menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#rooms">Rooms</a></li>
+          <li><a href="index.html#experiences">Experiences</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="gallery-main section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Moments from the Hills</p>
+          <h1>Gallery</h1>
+        </div>
+        <section class="gallery-grid" aria-label="Homestay photo gallery">
+          <figure class="gallery-item landscape"><img src="https://picsum.photos/seed/sikkim-valley/1200/800" alt="Wide valley view" loading="lazy"/></figure>
+          <figure class="gallery-item portrait"><img src="https://picsum.photos/seed/sikkim-window/800/1200" alt="Morning mist from window" loading="lazy"/></figure>
+          <figure class="gallery-item landscape"><img src="https://picsum.photos/seed/sikkim-breakfast/1200/800" alt="Traditional breakfast spread" loading="lazy"/></figure>
+          <figure class="gallery-item portrait"><img src="https://picsum.photos/seed/sikkim-prayerflags/800/1200" alt="Prayer flags near pine trees" loading="lazy"/></figure>
+          <figure class="gallery-item landscape"><img src="https://picsum.photos/seed/sikkim-fireplace/1200/800" alt="Indoor fireplace corner" loading="lazy"/></figure>
+          <figure class="gallery-item portrait"><img src="https://picsum.photos/seed/sikkim-hosts/800/1200" alt="Homestay hosts" loading="lazy"/></figure>
+          <figure class="gallery-item landscape"><img src="https://picsum.photos/seed/sikkim-forestroad/1200/800" alt="Forest road through fog" loading="lazy"/></figure>
+          <figure class="gallery-item portrait"><img src="https://picsum.photos/seed/sikkim-tea/800/1200" alt="Tea on balcony" loading="lazy"/></figure>
+          <figure class="gallery-item landscape"><img src="https://picsum.photos/seed/sikkim-roomdetail/1200/800" alt="Room detail" loading="lazy"/></figure>
+          <figure class="gallery-item portrait"><img src="https://picsum.photos/seed/sikkim-village/800/1200" alt="Village lane" loading="lazy"/></figure>
+          <figure class="gallery-item landscape"><img src="https://picsum.photos/seed/sikkim-sunrisepeak/1200/800" alt="Sunrise over ridge" loading="lazy"/></figure>
+          <figure class="gallery-item portrait"><img src="https://picsum.photos/seed/sikkim-eveninglights/800/1200" alt="Evening lights in fog" loading="lazy"/></figure>
+        </section>
+      </div>
+    </main>
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <button class="lightbox-close" type="button" aria-label="Close gallery">&times;</button>
+      <button class="lightbox-prev" type="button" aria-label="Previous image">&#10094;</button>
+      <img id="lightbox-image" src="" alt="Expanded gallery image" />
+      <button class="lightbox-next" type="button" aria-label="Next image">&#10095;</button>
+    </div>
+    <footer class="site-footer">
+      <div class="footer-top container">
+        <p class="footer-brand">Mist &amp; Maple Homestay</p>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li><li><a href="index.html#rooms">Rooms</a></li>
+          <li><a href="index.html#experiences">Experiences</a></li><li><a href="gallery.html">Gallery</a></li>
+          <li><a href="about.html">About</a></li><li><a href="index.html#contact">Contact</a></li>
+        </ul>
+        <div class="social-links">
+          <a href="#" aria-label="Instagram">Instagram</a>
+          <a href="#" aria-label="Facebook">Facebook</a>
+        </div>
+      </div>
+      <div class="footer-bottom container">
+        <p>&copy; 2026 Mist &amp; Maple Homestay, Ravangla, Sikkim. All rights reserved.</p>
+      </div>
+    </footer>
+    <script src="main.js"></script>
+  </body>
+</html>
