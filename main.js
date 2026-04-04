@@ -1,13 +1,26 @@
 /* ============================================================
    MIST & MAPLE — main.js
    Stars · House float · Parallax · Cursor · Nav · Lightbox
+   3D Tilt · Scroll Progress · Touch Swipe
    ============================================================ */
+
+// ── Touch device detection ─────────────────────────────────
+const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+// ── Scroll progress bar ────────────────────────────────────
+const progressBar = document.createElement('div');
+progressBar.id = 'scroll-progress';
+document.body.prepend(progressBar);
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  progressBar.style.width = (pct * 100) + '%';
+}, { passive: true });
 
 // ── Custom Cursor ──────────────────────────────────────────
 const cursor     = document.getElementById('cursor');
 const cursorRing = document.getElementById('cursorRing');
 
-if (cursor && cursorRing) {
+if (cursor && cursorRing && !isTouch) {
   let mx = 0, my = 0, rx = 0, ry = 0;
   document.addEventListener('mousemove', e => {
     mx = e.clientX; my = e.clientY;
@@ -31,6 +44,10 @@ if (cursor && cursorRing) {
       cursorRing.style.width = cursorRing.style.height = '34px';
     });
   });
+} else if (cursor && cursorRing) {
+  // Hide cursor elements on touch devices
+  cursor.style.display = 'none';
+  cursorRing.style.display = 'none';
 }
 
 // ── Star canvas (hero) ────────────────────────────────────
@@ -81,7 +98,7 @@ if (heroPhoto) {
 
 // ── Parallax mouse-move ───────────────────────────────────
 const heroScene = document.getElementById('heroScene');
-if (heroScene) {
+if (heroScene && !isTouch) {
   const layers = [
     { id: 'layerSky',    dx: 0.006, dy: 0.003 },
     { id: 'layerKanche', dx: 0.014, dy: 0.007 },
@@ -121,7 +138,6 @@ if (heroScene) {
 const layerHouse = document.getElementById('layerHouse');
 if (layerHouse) {
   let houseT = 0;
-  let baseY = 0;
   (function floatHouse() {
     houseT += 0.012;
     const bob = Math.sin(houseT) * 5;
@@ -143,13 +159,51 @@ if (particleContainer) {
       left: ${Math.random() * 100}%;
       bottom: ${Math.random() * 50 + 5}%;
       width: ${size}px; height: ${size}px;
-      background: ${isAmber ? 'rgba(196,132,74,0.7)' : 'rgba(200,170,240,0.5)'};
+      background: ${isAmber ? 'rgba(184,128,77,0.7)' : 'rgba(200,170,240,0.5)'};
       filter: blur(${isAmber ? 0.5 : 1}px);
       animation-duration: ${6 + Math.random() * 13}s;
       animation-delay: ${Math.random() * 15}s;
     `;
     particleContainer.appendChild(p);
   }
+}
+
+// ── 3D Tilt on mousemove ──────────────────────────────────
+if (!isTouch) {
+  function applyTilt(selector, maxDeg) {
+    document.querySelectorAll(selector).forEach(card => {
+      let rafId = null;
+      let targetRX = 0, targetRY = 0, currentRX = 0, currentRY = 0;
+
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const cx = rect.left + rect.width  / 2;
+        const cy = rect.top  + rect.height / 2;
+        const dx = (e.clientX - cx) / (rect.width  / 2);
+        const dy = (e.clientY - cy) / (rect.height / 2);
+        targetRY =  dx * maxDeg;
+        targetRX = -dy * maxDeg;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        targetRX = 0;
+        targetRY = 0;
+      });
+
+      (function animTilt() {
+        currentRX += (targetRX - currentRX) * 0.1;
+        currentRY += (targetRY - currentRY) * 0.1;
+        if (Math.abs(currentRX) > 0.01 || Math.abs(currentRY) > 0.01 ||
+            Math.abs(targetRX) > 0.01  || Math.abs(targetRY) > 0.01) {
+          card.style.transform = `rotateX(${currentRX}deg) rotateY(${currentRY}deg)`;
+        }
+        requestAnimationFrame(animTilt);
+      })();
+    });
+  }
+
+  applyTilt('.room-card', 8);
+  applyTilt('.experience-tile', 5);
 }
 
 // ── Nav state ─────────────────────────────────────────────
@@ -165,7 +219,8 @@ function handleNavState() {
 }
 
 if (navToggle && navMenu) {
-  navToggle.addEventListener('click', () => {
+  navToggle.addEventListener('click', e => {
+    e.stopPropagation();
     const open = navMenu.classList.toggle('open');
     navToggle.setAttribute('aria-expanded', String(open));
   });
@@ -173,6 +228,14 @@ if (navToggle && navMenu) {
     navMenu.classList.remove('open');
     navToggle.setAttribute('aria-expanded', 'false');
   }));
+  // Close menu on outside click
+  document.addEventListener('click', e => {
+    if (navMenu.classList.contains('open') &&
+        !navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+      navMenu.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
 }
 window.addEventListener('scroll', handleNavState, { passive: true });
 window.addEventListener('load', handleNavState);
@@ -185,16 +248,16 @@ if ('IntersectionObserver' in window && revealEls.length) {
   revealEls.forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(28px)';
-    el.style.transition = 'opacity .65s ease, transform .65s ease';
+    el.style.transition = 'opacity .65s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform .65s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
   });
   const io = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const idx = Array.from(revealEls).indexOf(entry.target) % 4;
+        const idx = Array.from(revealEls).indexOf(entry.target) % 6;
         setTimeout(() => {
           entry.target.style.opacity = '1';
           entry.target.style.transform = 'translateY(0)';
-        }, idx * 80);
+        }, idx * 120);
         io.unobserve(entry.target);
       }
     });
@@ -254,4 +317,22 @@ if (lightbox && galleryImages.length) {
     if (e.key === 'ArrowLeft')  navigate(-1);
     if (e.key === 'ArrowRight') navigate(1);
   });
+
+  // Touch swipe support for lightbox
+  let touchStartX = 0;
+  lightbox.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  lightbox.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
+  }, { passive: true });
 }
+
+// ── Experience tiles: always-visible descriptions on touch ─
+if (isTouch) {
+  document.querySelectorAll('.experience-tile').forEach(tile => {
+    tile.classList.add('touch-visible');
+  });
+}
+
