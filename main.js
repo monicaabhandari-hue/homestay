@@ -82,7 +82,7 @@ if (starCanvas) {
       const pulse = s.a + Math.sin(t * s.speed * 40 + s.phase) * 0.15;
       ctx.beginPath();
       ctx.arc(s.x * starCanvas.width, s.y * starCanvas.height, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(240,230,255,${Math.max(0, pulse)})`;
+      ctx.fillStyle = `rgba(220,235,255,${Math.max(0, pulse)})`;
       ctx.fill();
     });
     requestAnimationFrame(drawStars);
@@ -159,7 +159,7 @@ if (particleContainer) {
       left: ${Math.random() * 100}%;
       bottom: ${Math.random() * 50 + 5}%;
       width: ${size}px; height: ${size}px;
-      background: ${isAmber ? 'rgba(184,128,77,0.7)' : 'rgba(200,170,240,0.5)'};
+      background: ${isAmber ? 'rgba(232,148,58,0.7)' : 'rgba(42,171,181,0.5)'};
       filter: blur(${isAmber ? 0.5 : 1}px);
       animation-duration: ${6 + Math.random() * 13}s;
       animation-delay: ${Math.random() * 15}s;
