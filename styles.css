@@ -295,7 +295,7 @@ p  { margin: 0 0 1rem; }
 .kanche-label {
   position: absolute; bottom: 34%; right: 8%; z-index: 5;
   text-align: right; pointer-events: none;
-  animation: fadeIn 2s ease both, gentleFloat 6s ease-in-out 2s infinite;
+  animation: fadeIn 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both, gentleFloat 6s ease-in-out 2s infinite;
 }
 .kanche-label span {
   display: block; font-family: var(--font-body); font-weight: 200;

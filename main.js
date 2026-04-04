@@ -253,6 +253,7 @@ if ('IntersectionObserver' in window && revealEls.length) {
   const io = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
+        // Use modulo 6 to stagger up to 6 visible cards per batch (6 × 120ms = 720ms max)
         const idx = Array.from(revealEls).indexOf(entry.target) % 6;
         setTimeout(() => {
           entry.target.style.opacity = '1';
