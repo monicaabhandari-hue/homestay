@@ -246,7 +246,7 @@ window.addEventListener('load', handleNavState);
 const revealEls = document.querySelectorAll(
   '.room-card, .experience-tile, .testimonial-card, .about-content, .gallery-item'
 );
-if ('IntersectionObserver' in window && revealEls.length && typeof gsap === 'undefined') {
+if ('IntersectionObserver' in window && revealEls.length && (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined')) {
   revealEls.forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(28px)';
@@ -518,7 +518,12 @@ if (isTouch) {
     isPlaying = !isPlaying;
     if (isPlaying) {
       audio.volume = 0.22;
-      audio.play().catch(() => { isPlaying = false; });
+      audio.play().catch(err => {
+        console.warn('Audio playback failed:', err.message);
+        isPlaying = false;
+        btn.textContent = '🔇';
+        btn.classList.remove('playing');
+      });
       btn.textContent = '🔊';
       btn.classList.add('playing');
       btn.setAttribute('aria-label', 'Turn off nature sounds');
