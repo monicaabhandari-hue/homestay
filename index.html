@@ -15,6 +15,15 @@
     <div class="cursor" id="cursor"></div>
     <div class="cursor-ring" id="cursorRing"></div>
 
+    <!-- Ambient nature sound toggle -->
+    <button class="sound-toggle" id="soundToggle" type="button" aria-label="Toggle nature sounds" title="Toggle ambient nature sounds">
+      🔇
+    </button>
+    <audio id="natureAudio" loop preload="none">
+      <source src="https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3" type="audio/mpeg">
+      Your browser does not support the audio element. Nature sound playback is not available.
+    </audio>
+
     <header class="site-header">
       <nav class="site-nav" aria-label="Primary navigation">
         <a class="brand" href="index.html"><em>Saipatri</em> Homestay</a>
@@ -24,11 +33,12 @@
         </button>
         <ul id="nav-menu" class="nav-menu">
           <li><a href="index.html">Home</a></li>
+          <li><a href="#experience">Experience</a></li>
           <li><a href="#rooms">Rooms</a></li>
-          <li><a href="#experiences">Experiences</a></li>
+          <li><a href="#experiences">Explore</a></li>
           <li><a href="gallery.html">Gallery</a></li>
           <li><a href="about.html">About</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#contact">Book</a></li>
         </ul>
       </nav>
     </header>
@@ -39,6 +49,8 @@
         <div class="hero-scene" id="heroScene">
           <div class="parallax-layer scene-sky" id="layerSky"></div>
           <canvas id="starCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
+          <!-- Three.js fog/mist particle layer -->
+          <canvas id="threeCanvas" aria-hidden="true"></canvas>
           <div class="mist-band"></div>
           <div class="mist-band"></div>
           <div class="mist-band"></div>
@@ -49,22 +61,22 @@
             <svg viewBox="0 0 1440 400" preserveAspectRatio="none" style="width:100%;display:block;">
               <defs>
                 <linearGradient id="peakFar" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#1a2d50"/>
-                  <stop offset="55%" stop-color="#112038"/>
-                  <stop offset="100%" stop-color="#0d1a30"/>
+                  <stop offset="0%" stop-color="#1a3520"/>
+                  <stop offset="55%" stop-color="#112818"/>
+                  <stop offset="100%" stop-color="#0d1e10"/>
                 </linearGradient>
                 <linearGradient id="snowFar" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#f0f4ff" stop-opacity="0.85"/>
-                  <stop offset="50%" stop-color="#c8daf0" stop-opacity="0.4"/>
-                  <stop offset="100%" stop-color="#8aaac8" stop-opacity="0"/>
+                  <stop offset="0%" stop-color="#f0f5ee" stop-opacity="0.9"/>
+                  <stop offset="50%" stop-color="#d5e6d0" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#a0c0a8" stop-opacity="0"/>
                 </linearGradient>
                 <linearGradient id="peakGlow" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#d4724a" stop-opacity="0.35"/>
-                  <stop offset="100%" stop-color="#d4724a" stop-opacity="0"/>
+                  <stop offset="0%" stop-color="#E89A5B" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#E89A5B" stop-opacity="0"/>
                 </linearGradient>
                 <filter id="softBlur"><feGaussianBlur stdDeviation="2.5"/></filter>
               </defs>
-              <path fill="rgba(20,60,100,0.2)" filter="url(#softBlur)"
+              <path fill="rgba(15,40,20,0.25)" filter="url(#softBlur)"
                 d="M0,400 L0,240 L120,155 L240,200 L360,120 L480,175 L600,95 L720,145 L840,88 L960,140 L1080,100 L1200,155 L1320,115 L1440,170 L1440,400 Z"/>
               <path fill="url(#peakFar)" opacity="0.75"
                 d="M0,400 L0,280 L120,200 L240,240 L340,165 L420,205 L500,175 L560,400 Z"/>
@@ -83,8 +95,8 @@
                 d="M718,148 L742,118 L748,92 L768,104 L780,115 L796,104 L812,92 L830,106 L845,115 L822,102 L812,92 L792,108 L780,115 L765,105 L748,92 L736,116 L718,148 Z"/>
               <path fill="url(#snowFar)" opacity="0.65"
                 d="M638,170 L660,155 L698,192 L682,174 L658,170 L638,182 L615,218 L600,204 L638,170 Z"/>
-              <path fill="rgba(212,114,74,0.18)" d="M748,92 L746,105 L742,125 L748,92 Z"/>
-              <path fill="rgba(212,114,74,0.12)" d="M812,92 L815,104 L818,120 L812,92 Z"/>
+              <path fill="rgba(232,154,91,0.2)" d="M748,92 L746,105 L742,125 L748,92 Z"/>
+              <path fill="rgba(232,154,91,0.14)" d="M812,92 L815,104 L818,120 L812,92 Z"/>
             </svg>
           </div>
 
@@ -93,13 +105,13 @@
             <svg viewBox="0 0 1440 260" preserveAspectRatio="none" style="width:100%;display:block;">
               <defs>
                 <linearGradient id="midHill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#152540"/>
-                  <stop offset="100%" stop-color="#0a1520"/>
+                  <stop offset="0%" stop-color="#1a3220"/>
+                  <stop offset="100%" stop-color="#0d1e10"/>
                 </linearGradient>
               </defs>
               <path fill="url(#midHill)"
                 d="M0,260 L0,180 Q80,120 160,155 Q240,90 330,135 Q410,70 500,115 Q580,55 660,100 Q740,65 820,108 Q900,72 980,115 Q1060,80 1140,122 Q1220,88 1300,130 Q1380,100 1440,140 L1440,260 Z"/>
-              <path fill="rgba(212,114,74,0.1)"
+              <path fill="rgba(232,154,91,0.08)"
                 d="M0,180 Q80,120 160,155 Q240,90 330,135 Q330,140 240,95 Q160,160 80,125 L0,185 Z"/>
             </svg>
           </div>
@@ -109,23 +121,23 @@
             <svg viewBox="0 0 1440 160" preserveAspectRatio="none" style="width:100%;display:block;">
               <defs>
                 <linearGradient id="groundD" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#0f1a28"/>
-                  <stop offset="100%" stop-color="#050c15"/>
+                  <stop offset="0%" stop-color="#0d1e10"/>
+                  <stop offset="100%" stop-color="#050e06"/>
                 </linearGradient>
               </defs>
               <rect width="1440" height="160" fill="url(#groundD)"/>
-              <g fill="#081018">
+              <g fill="#071008">
                 <polygon points="0,160 16,95 32,160"/><polygon points="22,160 42,75 62,160"/>
                 <polygon points="48,160 70,88 92,160"/><polygon points="78,160 104,68 130,160"/>
                 <polygon points="115,160 146,80 177,160"/><polygon points="158,160 184,96 210,160"/>
                 <polygon points="196,160 218,108 240,160"/>
               </g>
-              <g fill="#081018">
+              <g fill="#071008">
                 <polygon points="1200,160 1218,100 1236,160"/><polygon points="1228,160 1252,78 1276,160"/>
                 <polygon points="1262,160 1290,72 1318,160"/><polygon points="1300,160 1332,68 1364,160"/>
                 <polygon points="1348,160 1376,80 1404,160"/><polygon points="1392,160 1416,96 1440,160"/>
               </g>
-              <g fill="#0c1420" opacity="0.85">
+              <g fill="#0a1a0c" opacity="0.85">
                 <polygon points="240,160 262,110 284,160"/><polygon points="270,160 298,92 326,160"/>
                 <polygon points="1110,160 1134,108 1158,160"/><polygon points="1142,160 1170,94 1198,160"/>
               </g>
@@ -135,7 +147,7 @@
           <!-- HOUSE -->
           <div class="parallax-layer" id="layerHouse"
             style="position:absolute;bottom:15.5%;left:50%;transform:translateX(-50%);width:clamp(240px,22vw,320px);pointer-events:none;">
-            <div style="position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:200px;height:50px;background:radial-gradient(ellipse,rgba(232,148,58,0.25) 0%,transparent 70%);pointer-events:none;"></div>
+            <div style="position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:200px;height:50px;background:radial-gradient(ellipse,rgba(232,154,91,0.25) 0%,transparent 70%);pointer-events:none;"></div>
             <svg viewBox="0 0 300 230" style="width:100%;display:block;filter:drop-shadow(0 24px 52px rgba(0,0,0,0.8));">
               <defs>
                 <linearGradient id="hWall" x1="0" y1="0" x2="0" y2="1">
@@ -225,8 +237,8 @@
             <svg viewBox="0 0 1440 110" preserveAspectRatio="none" style="width:100%;display:block;">
               <defs>
                 <linearGradient id="frontD" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#0c1420"/>
-                  <stop offset="100%" stop-color="#03080e"/>
+                  <stop offset="0%" stop-color="#0c1c0e"/>
+                  <stop offset="100%" stop-color="#030906"/>
                 </linearGradient>
               </defs>
               <path fill="url(#frontD)"
@@ -243,12 +255,12 @@
         <div class="hero-overlay"></div>
 
         <div class="hero-content container">
-          <p class="eyebrow">Kalimpong, Darjeeling District · 1,250 m</p>
+          <p class="eyebrow">Echhey, Kalimpong · 1,250 m above sea level</p>
           <h1><em>Saipatri</em><br>Homestay</h1>
-          <p class="tagline">Wake up to the Himalayas.</p>
+          <p class="tagline">Wake up to mist, mountains &amp; mountain warmth.</p>
           <div class="hero-actions">
             <a class="btn" href="#rooms">Explore Rooms</a>
-            <a class="btn btn-secondary" href="#contact">Book a Stay</a>
+            <a class="btn btn-secondary" href="#contact">Book Your Stay</a>
           </div>
         </div>
 
@@ -263,12 +275,63 @@
         </div>
       </section>
 
-      <!-- ROOMS -->
+      <!-- EXPERIENCE THE STAY -->
+      <section class="section experience-stay-section" id="experience">
+        <div class="container">
+          <div class="experience-stay-grid">
+            <div class="experience-stay-text">
+              <div class="section-heading">
+                <p class="eyebrow">The Saipatri Way</p>
+                <h2>Experience the Stay</h2>
+              </div>
+              <p class="lead">Nestled at 1,250 metres above sea level in Echhey, Kalimpong, Saipatri Homestay offers a rare glimpse into slow mountain life — where mornings begin with mist rolling in from the valleys and evenings settle into birdsong and distant prayer bells.</p>
+              <p>Stay with Babin and Geeta, your warm and welcoming hosts, who take deep pride in making every guest feel truly at home. From locally sourced Himalayan meals to unhurried conversations over chai on the veranda, every moment here is an invitation to breathe deeply and simply be.</p>
+              <div class="stay-highlights">
+                <div class="stay-highlight">
+                  <span class="highlight-icon">🍃</span>
+                  <div>
+                    <strong>All Meals Included</strong>
+                    <p>Breakfast, lunch &amp; dinner — freshly prepared with locally available seasonal ingredients</p>
+                  </div>
+                </div>
+                <div class="stay-highlight">
+                  <span class="highlight-icon">🕊️</span>
+                  <div>
+                    <strong>Flexible Check-in &amp; Check-out</strong>
+                    <p>No rigid timings — arrive and leave at your own pace, just like home</p>
+                  </div>
+                </div>
+                <div class="stay-highlight">
+                  <span class="highlight-icon">🌿</span>
+                  <div>
+                    <strong>₹1,499 per person</strong>
+                    <p>Inclusive of all meals — an honest, wholesome mountain escape</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="experience-stay-image">
+              <img src="images/50195A80-31BB-44FC-83EF-65C56B9D6E10_1_102_o.jpeg" alt="Morning mist view from Saipatri Homestay balcony" loading="lazy"/>
+              <div class="address-card">
+                <p class="address-label">Find Us</p>
+                <address>
+                  13th Mile, Echhey Busty (Mondal Gaon)<br>
+                  P.O. Echhey, Kalimpong<br>
+                  District Kalimpong<br>
+                  West Bengal
+                </address>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOMS & VIEWS -->
       <section class="section rooms-section" id="rooms">
         <div class="container">
           <div class="section-heading">
             <p class="eyebrow">Stay</p>
-            <h2>Rooms with Mountain Quiet</h2>
+            <h2>Rooms &amp; Views</h2>
           </div>
           <div class="rooms-grid">
             <article class="room-card">
@@ -279,7 +342,8 @@
               <div class="room-content">
                 <h3>Standard Room</h3>
                 <p>Cozy timber-lined room for a peaceful mountain night, with handwoven textiles and warm pine floors.</p>
-                <p class="price">INR 3,200 / night</p>
+                <p class="price">₹1,499 <small>/ person / night</small></p>
+                <p class="price-note">Incl. breakfast, lunch &amp; dinner</p>
                 <a class="btn small" href="#contact">Enquire</a>
               </div>
             </article>
@@ -291,7 +355,8 @@
               <div class="room-content">
                 <h3>Deluxe Valley-View</h3>
                 <p>Wake to drifting clouds and layered hills at dawn, with panoramic windows facing the valley.</p>
-                <p class="price">INR 4,600 / night</p>
+                <p class="price">₹1,499 <small>/ person / night</small></p>
+                <p class="price-note">Incl. breakfast, lunch &amp; dinner</p>
                 <a class="btn small" href="#contact">Enquire</a>
               </div>
             </article>
@@ -303,7 +368,8 @@
               <div class="room-content">
                 <h3>Family Suite</h3>
                 <p>Spacious suite with a private sit-out facing Kanchenjunga on clear Himalayan mornings.</p>
-                <p class="price">INR 6,200 / night</p>
+                <p class="price">₹1,499 <small>/ person / night</small></p>
+                <p class="price-note">Incl. breakfast, lunch &amp; dinner</p>
                 <a class="btn small" href="#contact">Enquire</a>
               </div>
             </article>
@@ -311,7 +377,7 @@
         </div>
       </section>
 
-      <!-- EXPERIENCES -->
+      <!-- LOCAL EXPERIENCES -->
       <section class="section experiences-section" id="experiences">
         <div class="container">
           <div class="section-heading">
@@ -321,35 +387,35 @@
           <div class="experiences-row">
             <article class="experience-tile">
               <span class="exp-num">01</span>
-              <img src="images/EC83723D-78D1-4B79-96E9-9F75B94DBA7B.jpeg" alt="Hiking trail near Kalimpong" loading="lazy"/>
-              <div class="overlay"><h3>Hiking Trails</h3><p>Follow misty paths through pine and rhododendron forests to ridge-top viewpoints. Our guided treks range from gentle morning walks to full-day adventures through Kalimpong's hidden trails.</p></div>
+              <img src="images/EC83723D-78D1-4B79-96E9-9F75B94DBA7B.jpeg" alt="Tea gardens near Kalimpong" loading="lazy"/>
+              <div class="overlay"><h3>Tea Gardens</h3><p>Walk through lush green terraced tea gardens that carpet the hillsides around Kalimpong. Witness the age-old art of tea plucking, learn about processing, and savour the freshest first-flush teas with our hosts.</p></div>
             </article>
             <article class="experience-tile">
               <span class="exp-num">02</span>
               <img src="images/D3171CE0-F08B-444B-8A4C-957435D5EC69.jpeg" alt="Local cuisine at Saipatri Homestay" loading="lazy"/>
-              <div class="overlay"><h3>Local Cuisine</h3><p>Taste home-cooked Tamang and Nepali mountain favorites from our own kitchen garden. From steaming momos to traditional thukpa, every meal is a celebration of Himalayan flavors.</p></div>
+              <div class="overlay"><h3>Home-Cooked Meals</h3><p>Savour freshly prepared Nepali and Kalimpong hill cuisine — steaming momos, thukpa, gundruk, and seasonal vegetables sourced from the local market and our own kitchen garden.</p></div>
             </article>
             <article class="experience-tile">
               <span class="exp-num">03</span>
               <img src="images/DE110AD1-A317-4B47-87FE-69401F2103F6.jpeg" alt="Village walk in Kalimpong" loading="lazy"/>
-              <div class="overlay"><h3>Village Walks</h3><p>Meet artisans, farmers, and stories rooted deep in the Kalimpong hills. Explore centuries-old monasteries, vibrant local markets, and the rich cultural heritage of the region.</p></div>
+              <div class="overlay"><h3>Village Walks</h3><p>Meet artisans, farmers, and keepers of centuries-old stories rooted in the Kalimpong hills. Explore monasteries, vibrant local markets, and the rich living heritage of the region at an unhurried pace.</p></div>
             </article>
             <article class="experience-tile">
               <span class="exp-num">04</span>
               <img src="images/D3959C11-D511-40E2-959C-565F2D90A2F6.jpeg" alt="Sunrise viewpoint from Kalimpong" loading="lazy"/>
-              <div class="overlay"><h3>Sunrise Viewpoint</h3><p>Watch first light paint Kanchenjunga gold on clear Himalayan mornings. Our exclusive viewpoint offers an unobstructed panorama of the world's third highest peak at dawn.</p></div>
+              <div class="overlay"><h3>Sunrise Viewpoints</h3><p>Watch the first light paint Kanchenjunga's snow-clad peaks in shades of gold and rose on clear Himalayan mornings. Our exclusive viewpoints offer unobstructed panoramas that stay with you long after you leave.</p></div>
             </article>
           </div>
         </div>
       </section>
 
-      <!-- CONTACT -->
+      <!-- BOOK YOUR STAY -->
       <section class="section contact-section" id="contact">
         <div class="container contact-grid">
           <div>
             <div class="section-heading">
-              <p class="eyebrow">Plan Your Stay</p>
-              <h2>Contact &amp; Booking</h2>
+              <p class="eyebrow">Plan Your Visit</p>
+              <h2>Book Your Stay</h2>
             </div>
             <form class="booking-form" id="booking-form">
               <label for="name">Name</label>
@@ -357,25 +423,31 @@
               <label for="email">Email</label>
               <input id="email" name="email" type="email" required placeholder="your@email.com"/>
               <div class="field-row">
-                <div><label for="checkin">Check-in</label><input id="checkin" name="checkin" type="date" required/></div>
-                <div><label for="checkout">Check-out</label><input id="checkout" name="checkout" type="date" required/></div>
+                <div><label for="checkin">Arrival Date</label><input id="checkin" name="checkin" type="date" required/></div>
+                <div><label for="checkout">Departure Date</label><input id="checkout" name="checkout" type="date" required/></div>
               </div>
               <label for="guests">Number of guests</label>
               <input id="guests" name="guests" type="number" min="1" max="10" required placeholder="2"/>
-              <label for="message">Message</label>
-              <textarea id="message" name="message" rows="4" placeholder="Tell us about your trip…"></textarea>
+              <label for="message">Message (optional)</label>
+              <textarea id="message" name="message" rows="4" placeholder="Any special requests or questions…"></textarea>
               <br/><br/>
               <button class="btn" type="submit">Send Enquiry</button>
               <p class="form-message" id="form-message" aria-live="polite"></p>
             </form>
           </div>
           <aside class="contact-info">
-            <h3>Visit Saipatri Homestay</h3>
-            <p>Kalimpong<br/>Darjeeling District, West Bengal, India</p>
+            <h3>Your Hosts — Babin &amp; Geeta</h3>
+            <p>We welcome you to our home in Echhey, Kalimpong. Come as a guest, leave as family.</p>
+            <p style="margin-top:1rem;">
+              13th Mile, Echhey Busty (Mondal Gaon)<br>
+              P.O. Echhey, Kalimpong<br>
+              District Kalimpong, West Bengal
+            </p>
             <p><a href="tel:+919832558906">+91 98325 58906</a> / <a href="tel:+918653453773">+91 86534 53773</a></p>
-            <p style="margin-top:1rem;font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);">Open Year-Round</p>
-            <iframe title="Map showing Kalimpong"
-              src="https://www.google.com/maps?q=Kalimpong%2C%20West%20Bengal&output=embed"
+            <p style="margin-top:.8rem;font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);">No fixed check-in or check-out time</p>
+            <p style="font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);">Open Year-Round</p>
+            <iframe title="Map showing Echhey Kalimpong"
+              src="https://www.google.com/maps?q=Echhey+Kalimpong+West+Bengal&output=embed"
               loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </aside>
         </div>
@@ -386,9 +458,10 @@
       <div class="footer-top container">
         <p class="footer-brand">Saipatri Homestay</p>
         <ul class="footer-links">
-          <li><a href="index.html">Home</a></li><li><a href="#rooms">Rooms</a></li>
-          <li><a href="#experiences">Experiences</a></li><li><a href="gallery.html">Gallery</a></li>
-          <li><a href="about.html">About</a></li><li><a href="#contact">Contact</a></li>
+          <li><a href="index.html">Home</a></li><li><a href="#experience">Experience</a></li>
+          <li><a href="#rooms">Rooms</a></li>
+          <li><a href="#experiences">Explore</a></li><li><a href="gallery.html">Gallery</a></li>
+          <li><a href="about.html">About</a></li><li><a href="#contact">Book</a></li>
         </ul>
         <div class="social-links">
           <a href="#" aria-label="Instagram">Instagram</a>
@@ -400,6 +473,15 @@
       </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+      integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu"
+      crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+      integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt"
+      crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+      integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d"
+      crossorigin="anonymous"></script>
     <script src="main.js"></script>
   </body>
 </html>

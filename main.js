@@ -2,6 +2,7 @@
    MIST & MAPLE — main.js
    Stars · House float · Parallax · Cursor · Nav · Lightbox
    3D Tilt · Scroll Progress · Touch Swipe
+   Three.js Fog Particles · GSAP Scroll Animations · Sound Toggle
    ============================================================ */
 
 // ── Touch device detection ─────────────────────────────────
@@ -240,11 +241,12 @@ if (navToggle && navMenu) {
 window.addEventListener('scroll', handleNavState, { passive: true });
 window.addEventListener('load', handleNavState);
 
-// ── Scroll-reveal ─────────────────────────────────────────
+// ── Scroll-reveal (fallback if GSAP/ScrollTrigger not available) ─────
+// GSAP ScrollTrigger handles these animations when available
 const revealEls = document.querySelectorAll(
   '.room-card, .experience-tile, .testimonial-card, .about-content, .gallery-item'
 );
-if ('IntersectionObserver' in window && revealEls.length) {
+if ('IntersectionObserver' in window && revealEls.length && (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined')) {
   revealEls.forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(28px)';
@@ -336,4 +338,201 @@ if (isTouch) {
     tile.classList.add('touch-visible');
   });
 }
+
+// ── Three.js fog / mist particle scene ────────────────────
+(function initThreeScene() {
+  const threeCanvas = document.getElementById('threeCanvas');
+  if (!threeCanvas || typeof THREE === 'undefined') return;
+
+  const renderer = new THREE.WebGLRenderer({ canvas: threeCanvas, alpha: true, antialias: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 200);
+  camera.position.set(0, 0, 8);
+
+  // Build a soft fog-sprite texture via an offscreen canvas
+  const fogTex = (function buildFogTexture() {
+    const fc = document.createElement('canvas');
+    fc.width = fc.height = 128;
+    const fctx = fc.getContext('2d');
+    const grad = fctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    grad.addColorStop(0,   'rgba(217,224,230,0.55)');
+    grad.addColorStop(0.4, 'rgba(217,224,230,0.18)');
+    grad.addColorStop(1,   'rgba(217,224,230,0)');
+    fctx.fillStyle = grad;
+    fctx.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(fc);
+  }());
+
+  // Create fog sprite cloud
+  const CLOUD_COUNT = 60;
+  const sprites = [];
+  for (let i = 0; i < CLOUD_COUNT; i++) {
+    const mat = new THREE.SpriteMaterial({
+      map: fogTex,
+      transparent: true,
+      opacity: Math.random() * 0.18 + 0.04,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+    const sprite = new THREE.Sprite(mat);
+    const scale = Math.random() * 5 + 2;
+    sprite.scale.set(scale, scale * 0.55, 1);
+    sprite.position.set(
+      (Math.random() - 0.5) * 22,
+      (Math.random() - 0.5) * 5 - 0.5,
+      (Math.random() - 0.5) * 6
+    );
+    // Drift speed
+    sprite.userData.vx = (Math.random() - 0.5) * 0.003;
+    sprite.userData.vy = (Math.random() - 0.5) * 0.0008;
+    scene.add(sprite);
+    sprites.push(sprite);
+  }
+
+  // Mouse parallax influence
+  let tMx = 0, tMy = 0;
+  if (!isTouch) {
+    document.addEventListener('mousemove', e => {
+      tMx = (e.clientX / window.innerWidth  - 0.5) * 0.6;
+      tMy = (e.clientY / window.innerHeight - 0.5) * 0.3;
+    }, { passive: true });
+  }
+
+  // Scroll depth effect on camera
+  let scrollY = 0;
+  window.addEventListener('scroll', () => { scrollY = window.scrollY; }, { passive: true });
+
+  let camX = 0, camY = 0;
+  function animateThree() {
+    requestAnimationFrame(animateThree);
+    // Smooth camera follow mouse
+    camX += (tMx - camX) * 0.04;
+    camY += (-tMy - camY) * 0.04;
+    camera.position.x = camX;
+    camera.position.y = camY;
+
+    // Drift sprites
+    sprites.forEach(sp => {
+      sp.position.x += sp.userData.vx;
+      sp.position.y += sp.userData.vy;
+      if (sp.position.x >  12) sp.position.x = -12;
+      if (sp.position.x < -12) sp.position.x =  12;
+      if (sp.position.y >   4) sp.position.y = -4;
+      if (sp.position.y <  -4) sp.position.y =  4;
+    });
+
+    // Hide Three.js canvas when scrolled past hero
+    const heroHeight = window.innerHeight;
+    threeCanvas.style.opacity = scrollY > heroHeight ? '0' : '0.6';
+
+    renderer.render(scene, camera);
+  }
+  animateThree();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+}());
+
+// ── GSAP scroll-triggered animations ──────────────────────
+(function initGSAP() {
+  if (typeof gsap === 'undefined') return;
+  if (typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+  } else {
+    return;
+  }
+
+  // Section headings fade-in from below
+  gsap.utils.toArray('.section-heading').forEach(el => {
+    gsap.from(el, {
+      scrollTrigger: { trigger: el, start: 'top 82%', once: true },
+      opacity: 0, y: 40, duration: 1.1,
+      ease: 'power3.out'
+    });
+  });
+
+  // "Experience the Stay" highlights stagger in
+  gsap.from('.stay-highlight', {
+    scrollTrigger: { trigger: '.stay-highlights', start: 'top 80%', once: true },
+    opacity: 0, x: -30, duration: 0.75,
+    stagger: 0.18, ease: 'power2.out'
+  });
+
+  // Experience stay image parallax
+  const expImg = document.querySelector('.experience-stay-image img');
+  if (expImg) {
+    gsap.to(expImg, {
+      scrollTrigger: {
+        trigger: '.experience-stay-section',
+        start: 'top bottom', end: 'bottom top',
+        scrub: 1.5
+      },
+      y: -40, ease: 'none'
+    });
+  }
+
+  // Room cards stagger
+  gsap.from('.room-card', {
+    scrollTrigger: { trigger: '.rooms-grid', start: 'top 80%', once: true },
+    opacity: 0, y: 50, duration: 0.9,
+    stagger: 0.18, ease: 'power3.out'
+  });
+
+  // Experience tiles slide in
+  gsap.from('.experience-tile', {
+    scrollTrigger: { trigger: '.experiences-row', start: 'top 80%', once: true },
+    opacity: 0, scale: 0.94, duration: 0.8,
+    stagger: 0.15, ease: 'power2.out'
+  });
+
+  // Contact section fade
+  gsap.from('.contact-grid > *', {
+    scrollTrigger: { trigger: '.contact-section', start: 'top 80%', once: true },
+    opacity: 0, y: 35, duration: 0.9,
+    stagger: 0.2, ease: 'power3.out'
+  });
+
+  // Testimonial cards
+  gsap.from('.testimonial-card', {
+    scrollTrigger: { trigger: '.testimonials-grid', start: 'top 80%', once: true },
+    opacity: 0, y: 30, duration: 0.8,
+    stagger: 0.15, ease: 'power2.out'
+  });
+}());
+
+// ── Ambient Nature Sound Toggle ────────────────────────────
+(function initSoundToggle() {
+  const btn   = document.getElementById('soundToggle');
+  const audio = document.getElementById('natureAudio');
+  if (!btn || !audio) return;
+
+  let isPlaying = false;
+  btn.addEventListener('click', () => {
+    isPlaying = !isPlaying;
+    if (isPlaying) {
+      audio.volume = 0.22;
+      audio.play().catch(err => {
+        console.warn('Audio playback failed:', err.message);
+        isPlaying = false;
+        btn.textContent = '🔇';
+        btn.classList.remove('playing');
+      });
+      btn.textContent = '🔊';
+      btn.classList.add('playing');
+      btn.setAttribute('aria-label', 'Turn off nature sounds');
+    } else {
+      audio.pause();
+      btn.textContent = '🔇';
+      btn.classList.remove('playing');
+      btn.setAttribute('aria-label', 'Turn on nature sounds');
+    }
+  });
+}());
 
