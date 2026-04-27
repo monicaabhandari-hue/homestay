@@ -38,7 +38,7 @@
    body {
      font-family: var(--font-body);
      font-weight: 300;
-     color: #4f6789;
+     color: #727478;
      background: var(--parch);
      line-height: 1.7;
      overflow-x: hidden;
@@ -247,7 +247,7 @@
 }
 
    
-   /* Sky: deep forest green → misty gray → warm sunrise orange */
+   
    .scene-sky {
     background-image: url('images/bgphoto.jpeg');
     background-size: cover;
@@ -255,7 +255,7 @@
     background-repeat: no-repeat;
     filter: brightness(1.0) saturate(1.05);
     position: absolute;
-    inset: 0;  /* ADD THIS — makes it stretch full hero */
+    inset: 0;  
     width: 100%;
     height: 100%;
   }
@@ -300,9 +300,9 @@
     position: absolute; inset: 0; z-index: 0;
     background: linear-gradient(
       to bottom,
-      rgba(198, 199, 200, 0.1) 0%,
-      rgba(234, 232, 224, 0.15) 40%,
-      rgba(238, 236, 234, 0.3) 75%,
+      rgba(61, 65, 69, 0.1) 0%,
+      rgba(135, 133, 121, 0.15) 40%,
+      rgba(139, 133, 127, 0.3) 75%,
       rgba(242, 240, 240, 0.55) 100%
     );
     pointer-events: none;
@@ -343,7 +343,7 @@
      font-family: var(--font-display); font-weight: 300;
      font-style: italic;
      font-size: clamp(1.5rem, 2.5vw, 1.6rem);
-     color: rgba(7, 122, 230, 0.75);
+     color: rgba(4, 16, 26, 0.75);
      letter-spacing: 0.08em; margin-bottom: 2.4rem;
      transform: translateY(-40px);
    }
