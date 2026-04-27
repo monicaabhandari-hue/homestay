@@ -1,84 +1,879 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gallery | Saipatri Homestay</title>
-    <meta name="description" content="Photo gallery of Saipatri Homestay in Kalimpong." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="cursor" id="cursor"></div>
-    <div class="cursor-ring" id="cursorRing"></div>
-    <header class="site-header">
-      <nav class="site-nav solid" aria-label="Primary navigation">
-        <a class="brand" href="index.html"><em>Saipatri</em> Homestay</a>
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
-          <span class="sr-only">Toggle navigation</span>
-          <span></span><span></span><span></span>
-        </button>
-        <ul id="nav-menu" class="nav-menu">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="index.html#rooms">Rooms</a></li>
-          <li><a href="index.html#experiences">Experiences</a></li>
-          <li><a href="gallery.html">Gallery</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="index.html#contact">Contact</a></li>
-        </ul>
-      </nav>
-    </header>
-    <main class="gallery-main section">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Moments from the Hills</p>
-          <h1>Gallery</h1>
-        </div>
-        <section class="gallery-grid" aria-label="Homestay photo gallery">
-          <figure class="gallery-item portrait"><img src="images/3F941B21-92B0-4D2B-937E-429507DBAF80.jpeg" alt="Cozy homestay bedroom with wooden bed and white curtains" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/4B56FA4F-C1B3-48CE-BDA2-8ADC9981C088.jpeg" alt="Saipatri Homestay interior" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/50195A80-31BB-44FC-83EF-65C56B9D6E10_1_102_o.jpeg" alt="Homestay view from the hills" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/60F179B3-0069-450B-BBC0-0D23525A98F8_1_102_o.jpeg" alt="Kalimpong hillside scenery" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/67D08D96-24BC-4846-9E16-A90A7CB16D65.jpeg" alt="Homestay room with mountain view" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/97C5FBF5-F444-4266-A15F-DA90A8876F83_1_102_o.jpeg" alt="Kalimpong greenery and surroundings" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/A452AF3C-7F3C-4843-BD5A-F1D84DF94A8E.jpeg" alt="Homestay entrance and garden" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/C01914B1-1D02-459B-A104-D205009B221E.jpeg" alt="Mountain views from Saipatri Homestay" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/CB690865-94CA-41C2-9709-C0EADC22BDDE.jpeg" alt="Scenic Kalimpong landscape" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/D3171CE0-F08B-444B-8A4C-957435D5EC69.jpeg" alt="Homestay outdoor area" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/D3959C11-D511-40E2-959C-565F2D90A2F6.jpeg" alt="Saipatri Homestay surroundings" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/DE110AD1-A317-4B47-87FE-69401F2103F6.jpeg" alt="Kalimpong morning mist and hills" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/EC83723D-78D1-4B79-96E9-9F75B94DBA7B.jpeg" alt="Homestay balcony view" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/EE3D5492-822E-4D49-AF44-303202644409_1_102_o.jpeg" alt="Kalimpong tea gardens and trails" loading="lazy"/></figure>
-          <figure class="gallery-item portrait"><img src="images/F35B233F-AAEE-49BD-A108-066F69A520F3_1_102_o.jpeg" alt="Evening view from Saipatri Homestay" loading="lazy"/></figure>
-        </section>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery | Saipatri Homestay</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* ── Gallery page overrides ── */
+    body { background: var(--parch); }
+
+    .gallery-page-hero {
+      padding: 140px 0 60px;
+      background: linear-gradient(180deg, var(--warm) 0%, var(--parch) 100%);
+      position: relative;
+    }
+    .gallery-page-hero::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--amber), transparent);
+    }
+
+    .gallery-page-hero .section-heading h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 300;
+      color: var(--indigo);
+      line-height: 1;
+      margin: 0;
+    }
+    .gallery-page-hero .section-heading h1 em {
+      font-style: italic;
+      color: var(--clay);
+    }
+
+    /* ── Masonry-style grid ── */
+    .gallery-section {
+      padding: 60px 0 120px;
+      background: var(--parch);
+    }
+
+    /* Filter tabs */
+    .gallery-filters {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border: 1px solid rgba(232,154,91,0.35);
+      background: transparent;
+      color: var(--indigo);
+      cursor: pointer;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: var(--night);
+    }
+
+    /* Columns grid */
+    .gallery-columns {
+      columns: 3;
+      column-gap: 12px;
+    }
+    .gallery-columns .g-item {
+      break-inside: avoid;
+      margin-bottom: 12px;
+      overflow: hidden;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      display: block;
+    }
+    .gallery-columns .g-item img {
+      width: 100%;
+      display: block;
+      border-radius: 6px;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  filter 0.4s ease;
+      object-fit: cover;
+    }
+    .gallery-columns .g-item:hover img {
+      transform: scale(1.04);
+      filter: brightness(0.85);
+    }
+    .gallery-columns .g-item .g-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 30, 20, 0);
+      transition: background 0.35s ease;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gallery-columns .g-item:hover .g-overlay {
+      background: rgba(15, 30, 20, 0.25);
+    }
+    .g-overlay .zoom-icon {
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      color: white;
+      font-size: 2rem;
+      pointer-events: none;
+    }
+    .gallery-columns .g-item:hover .zoom-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Video thumbnail canvas */
+    .video-thumb {
+      width: 100%;
+      display: block;
+      border-radius: 6px;
+      background: #1a1a1a;
+      aspect-ratio: 16/9;
+    }
+
+    /* Video play button overlay */
+    .g-item.is-video { cursor: pointer; }
+    .g-item.is-video .video-overlay {
+      background: rgba(15, 30, 20, 0.3);
+      transition: background 0.3s ease;
+    }
+    .g-item.is-video:hover .video-overlay {
+      background: rgba(15, 30, 20, 0.5);
+    }
+    .play-btn {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: rgba(232, 154, 91, 0.9);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+      transition: transform 0.25s ease, background 0.25s ease;
+      padding-left: 4px;
+    }
+    .g-item.is-video:hover .play-btn {
+      transform: scale(1.12);
+      background: var(--amber);
+    }
+
+    /* Video lightbox player */
+    .lb-video-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: min(960px, 90vw);
+      width: 100%;
+    }
+    .lb-video-wrap video {
+      width: 100%;
+      border-radius: 6px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+      max-height: 80vh;
+      display: block;
+    }
+
+    /* ── LIGHTBOX ── */
+    .lb {
+      position: fixed; inset: 0; z-index: 3000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .lb.open { opacity: 1; pointer-events: all; }
+    .lb-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(8, 16, 10, 0.96);
+      cursor: zoom-out;
+    }
+    .lb-inner {
+      position: relative; z-index: 1;
+      max-width: min(1100px, 90vw); max-height: 88vh;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lb-inner img {
+      max-width: 100%; max-height: 88vh;
+      object-fit: contain; border-radius: 4px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+      transform: scale(0.92);
+      transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .lb.open .lb-inner img { transform: scale(1); }
+    .lb-close {
+      position: fixed; top: 20px; right: 24px;
+      background: rgba(245, 230, 211, 0.1);
+      border: 1px solid rgba(232,154,91,0.4);
+      color: var(--amber);
+      width: 44px; height: 44px; border-radius: 50%;
+      font-size: 1.3rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.25s ease, transform 0.25s ease;
+      z-index: 2;
+    }
+    .lb-close:hover { background: rgba(232,154,91,0.25); transform: rotate(90deg); }
+    .lb-prev, .lb-next {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(245, 230, 211, 0.08);
+      border: 1px solid rgba(232,154,91,0.3);
+      color: var(--amber);
+      width: 50px; height: 50px; border-radius: 50%;
+      font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.25s ease, transform 0.25s ease;
+      z-index: 2;
+    }
+    .lb-prev { left: 20px; }
+    .lb-next { right: 20px; }
+    .lb-prev:hover { background: rgba(232,154,91,0.2); transform: translateY(-50%) scale(1.1); }
+    .lb-next:hover { background: rgba(232,154,91,0.2); transform: translateY(-50%) scale(1.1); }
+    .lb-caption {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      font-family: var(--font-body); font-size: 0.75rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(232,240,248,0.5); white-space: nowrap; z-index: 2;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) { .gallery-columns { columns: 2; } }
+    @media (max-width: 520px) {
+      .gallery-columns { columns: 1; }
+      .lb-prev { left: 8px; }
+      .lb-next { right: 8px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAVBAR -->
+  <header class="site-header">
+    <nav class="site-nav solid">
+      <a class="brand" href="index.html"><em>Saipatri</em> Homestay</a>
+      <ul class="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="rooms.html">Rooms</a></li>
+        <li><a href="index.html#experiences">Explore</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Book</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="gallery-page-hero">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Moments from the hills</p>
+        <h1>Our <em>Gallery</em></h1>
       </div>
-    </main>
-    <div class="lightbox" id="lightbox" aria-hidden="true">
-      <button class="lightbox-close" type="button" aria-label="Close gallery">&times;</button>
-      <button class="lightbox-prev" type="button" aria-label="Previous image">&#10094;</button>
-      <img id="lightbox-image" src="" alt="Expanded gallery image" />
-      <button class="lightbox-next" type="button" aria-label="Next image">&#10095;</button>
     </div>
-    <footer class="site-footer">
-      <div class="footer-top container">
-        <p class="footer-brand">Saipatri Homestay</p>
-        <ul class="footer-links">
-          <li><a href="index.html">Home</a></li><li><a href="index.html#experience">Experience</a></li>
-          <li><a href="index.html#rooms">Rooms</a></li>
-          <li><a href="index.html#experiences">Explore</a></li><li><a href="gallery.html">Gallery</a></li>
-          <li><a href="about.html">About</a></li><li><a href="index.html#contact">Book</a></li>
-        </ul>
-        <div class="social-links">
-          <a href="#" aria-label="Instagram">Instagram</a>
-          <a href="#" aria-label="Facebook">Facebook</a>
+  </section>
+
+  <!-- GALLERY SECTION -->
+  <section class="gallery-section">
+    <div class="container">
+
+      <!-- Filter buttons -->
+      <div class="gallery-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="photo">Photos</button>
+        <button class="filter-btn" data-filter="video">Videos</button>
+      </div>
+
+      <!-- Masonry columns -->
+      <div class="gallery-columns" id="galleryColumns">
+
+        <!-- ═══════════════════════════════════════
+             PHOTOS
+             To add a new photo: copy any block below,
+             change BOTH occurrences of the filename.
+        ════════════════════════════════════════ -->
+
+        <div class="g-item" data-type="photo" data-src="images/1.jpeg">
+          <img src="images/1.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
         </div>
+
+        <div class="g-item" data-type="photo" data-src="images/2.jpeg">
+          <img src="images/2.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/3.jpeg">
+          <img src="images/3.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/4.jpeg">
+          <img src="images/4.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/5.jpeg">
+          <img src="images/5.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/6.jpeg">
+          <img src="images/6.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/7.jpeg">
+          <img src="images/7.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/8.jpeg">
+          <img src="images/8.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/9.jpeg">
+          <img src="images/9.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/10.jpeg">
+          <img src="images/10.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/11.jpeg">
+          <img src="images/11.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/12.jpeg">
+          <img src="images/12.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/15.jpeg">
+          <img src="images/15.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/17.jpeg">
+          <img src="images/17.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/19.jpeg">
+          <img src="images/19.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/20.jpeg">
+          <img src="images/20.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/21.jpeg">
+          <img src="images/21.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/22.jpeg">
+          <img src="images/22.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/23.jpeg">
+          <img src="images/23.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/24.jpeg">
+          <img src="images/24.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/25.jpeg">
+          <img src="images/25.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/27.jpeg">
+          <img src="images/27.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/28.jpeg">
+          <img src="images/28.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/29.jpeg">
+          <img src="images/29.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/30.jpeg">
+          <img src="images/30.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/31.jpeg">
+          <img src="images/31.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/32.jpeg">
+          <img src="images/32.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/33.jpeg">
+          <img src="images/33.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/34.jpeg">
+          <img src="images/34.jpeg" alt="Saipatri view" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+        <div class="g-item" data-type="photo" data-src="images/Abt.jpeg">
+          <img src="images/Abt.jpeg" alt="About Saipatri" loading="lazy" />
+          <div class="g-overlay"><span class="zoom-icon">⊕</span></div>
+        </div>
+
+
+        <!-- ═══════════════════════════════════════
+             VIDEOS
+             To add a new video: copy any block below,
+             change the data-video filename.
+        ════════════════════════════════════════ -->
+
+        <div class="g-item is-video" data-type="video" data-video="images/V1.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+
+        <div class="g-item is-video" data-type="video" data-video="images/V2.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+
+        <div class="g-item is-video" data-type="video" data-video="images/V3.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+
+        <div class="g-item is-video" data-type="video" data-video="images/V4.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+
+        <div class="g-item is-video" data-type="video" data-video="images/V5.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+
+        <div class="g-item is-video" data-type="video" data-video="images/V6.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+
+        <div class="g-item is-video" data-type="video" data-video="images/V7.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+
+        <div class="g-item is-video" data-type="video" data-video="images/V8.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+
+        <div class="g-item is-video" data-type="video" data-video="images/V9.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V10.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V11.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V20.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V21.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V22.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V23.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V24.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V25.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V26.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V27.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V28.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V29.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V112.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V113.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V117.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V118.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V119.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V201.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V202.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V203.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V204.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V205.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V206.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V207.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V208.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V209.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V2011.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V2022.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V2023.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V2024.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V2025.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V2026.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V2027.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V2028.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+        
+        <div class="g-item is-video" data-type="video" data-video="images/V2029.mp4">
+          <canvas class="video-thumb"></canvas>
+          <div class="g-overlay video-overlay"><span class="play-btn">▶</span></div>
+        </div>
+
       </div>
-      <div class="footer-bottom container">
-        <p>&copy; 2026 Saipatri Homestay, Kalimpong. All rights reserved.</p>
+    </div>
+  </section>
+
+  <!-- PHOTO LIGHTBOX -->
+  <div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <div class="lb-backdrop" id="lbBackdrop"></div>
+    <div class="lb-inner">
+      <img src="" alt="Gallery image" id="lbImg" />
+    </div>
+    <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+    <button class="lb-prev"  id="lbPrev"  aria-label="Previous">‹</button>
+    <button class="lb-next"  id="lbNext"  aria-label="Next">›</button>
+    <p class="lb-caption"    id="lbCaption"></p>
+  </div>
+
+  <!-- VIDEO LIGHTBOX -->
+  <div class="lb" id="videoLightbox" role="dialog" aria-modal="true" aria-label="Video player">
+    <div class="lb-backdrop" id="vlbBackdrop"></div>
+    <div class="lb-video-wrap">
+      <video id="vlbVideo" controls playsinline>
+        <source id="vlbSource" src="" type="video/mp4">
+      </video>
+    </div>
+    <button class="lb-close" id="vlbClose" aria-label="Close">✕</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-top container">
+      <p class="footer-brand">Saipatri Homestay</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="rooms.html">Rooms</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Book</a></li>
+      </ul>
+      <div class="social-links">
+        <a href="https://www.instagram.com/saipatrihomestay" target="_blank">Instagram</a>
       </div>
-    </footer>
-    <script src="main.js"></script>
-  </body>
+    </div>
+    <div class="footer-bottom container">
+      <p>&copy; 2026 Saipatri Homestay. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+
+  <script>
+    /* ════════════════════════════
+       FILTER
+    ════════════════════════════ */
+    const filterBtns   = document.querySelectorAll('.filter-btn');
+    const galleryItems = document.querySelectorAll('.g-item');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        galleryItems.forEach(item => {
+          item.style.display =
+            (filter === 'all' || item.dataset.type === filter) ? 'block' : 'none';
+        });
+      });
+    });
+
+    /* ════════════════════════════
+       AUTO-GENERATE VIDEO THUMBNAILS
+       Silently loads each video, seeks to ~10% duration, paints frame to canvas
+    ════════════════════════════ */
+    document.querySelectorAll('.g-item.is-video').forEach(item => {
+      const src    = item.dataset.video;
+      const canvas = item.querySelector('.video-thumb');
+      const ctx    = canvas.getContext('2d');
+
+      const vid        = document.createElement('video');
+      vid.src          = src;
+      vid.muted        = true;
+      vid.preload      = 'metadata';
+      vid.crossOrigin  = 'anonymous';
+      vid.playsInline  = true;
+
+      vid.addEventListener('loadedmetadata', () => {
+        vid.currentTime = Math.min(1, vid.duration * 0.1);
+      });
+
+      vid.addEventListener('seeked', () => {
+        canvas.width  = vid.videoWidth  || 640;
+        canvas.height = vid.videoHeight || 360;
+        ctx.drawImage(vid, 0, 0, canvas.width, canvas.height);
+        vid.src = ''; // free memory
+      });
+    });
+
+    /* ════════════════════════════
+       PHOTO LIGHTBOX
+    ════════════════════════════ */
+    const lb         = document.getElementById('lightbox');
+    const lbImg      = document.getElementById('lbImg');
+    const lbCaption  = document.getElementById('lbCaption');
+    const lbClose    = document.getElementById('lbClose');
+    const lbPrev     = document.getElementById('lbPrev');
+    const lbNext     = document.getElementById('lbNext');
+    const lbBackdrop = document.getElementById('lbBackdrop');
+
+    const photoItems = Array.from(document.querySelectorAll('.g-item[data-type="photo"]'));
+    let currentIndex = 0;
+
+    lbImg.style.transition = 'opacity 0.15s ease, transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94)';
+
+    function openLightbox(index) {
+      currentIndex = index;
+      lbImg.src = photoItems[index].dataset.src;
+      lbCaption.textContent = `${index + 1} / ${photoItems.length}`;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + photoItems.length) % photoItems.length;
+      lbImg.style.opacity = '0';
+      setTimeout(() => {
+        lbImg.src = photoItems[currentIndex].dataset.src;
+        lbCaption.textContent = `${currentIndex + 1} / ${photoItems.length}`;
+        lbImg.style.opacity = '1';
+      }, 150);
+    }
+
+    function showNext() {
+      currentIndex = (currentIndex + 1) % photoItems.length;
+      lbImg.style.opacity = '0';
+      setTimeout(() => {
+        lbImg.src = photoItems[currentIndex].dataset.src;
+        lbCaption.textContent = `${currentIndex + 1} / ${photoItems.length}`;
+        lbImg.style.opacity = '1';
+      }, 150);
+    }
+
+    photoItems.forEach((item, i) => item.addEventListener('click', () => openLightbox(i)));
+    lbClose.addEventListener('click', closeLightbox);
+    lbBackdrop.addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click', showPrev);
+    lbNext.addEventListener('click', showNext);
+
+    document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape')     closeLightbox();
+      if (e.key === 'ArrowLeft')  showPrev();
+      if (e.key === 'ArrowRight') showNext();
+    });
+
+    let touchStartX = 0;
+    lb.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+    lb.addEventListener('touchend',   e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) diff > 0 ? showNext() : showPrev();
+    });
+
+    /* ════════════════════════════
+       VIDEO LIGHTBOX
+    ════════════════════════════ */
+    const vlb       = document.getElementById('videoLightbox');
+    const vlbVideo  = document.getElementById('vlbVideo');
+    const vlbSource = document.getElementById('vlbSource');
+    const vlbClose  = document.getElementById('vlbClose');
+    const vlbBack   = document.getElementById('vlbBackdrop');
+
+    function openVideoLightbox(src) {
+      vlbSource.src = src;
+      vlbVideo.load();
+      vlbVideo.play();
+      vlb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVideoLightbox() {
+      vlb.classList.remove('open');
+      vlbVideo.pause();
+      vlbVideo.src = '';
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.g-item.is-video').forEach(item => {
+      item.addEventListener('click', () => openVideoLightbox(item.dataset.video));
+    });
+
+    vlbClose.addEventListener('click', closeVideoLightbox);
+    vlbBack.addEventListener('click',  closeVideoLightbox);
+
+    document.addEventListener('keydown', e => {
+      if (vlb.classList.contains('open') && e.key === 'Escape') closeVideoLightbox();
+    });
+  </script>
+
+</body>
 </html>

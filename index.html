@@ -9,19 +9,51 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      .exp-svg-illustration {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .experience-tile:hover .exp-svg-illustration {
+        transform: scale(1.05);
+      }
+      /* Fix overlay: hidden until hover */
+      .experience-tile .overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(8,15,10,0.75) 0%, rgba(8,15,10,0.4) 60%,
+        transparent 100%);
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 1.8rem 1.5rem;
+      }
+      .exp-price-badge {
+        display: inline-block;
+        margin-top: 0.6rem;
+        font-size: 0.62rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--amber, #c4955a);
+        border: 1px solid rgba(196,149,90,0.5);
+        padding: 0.28rem 0.8rem;
+        border-radius: 2px;
+        width: fit-content;
+      }
+    </style>
   </head>
   <body class="home-page">
 
     <div class="cursor" id="cursor"></div>
     <div class="cursor-ring" id="cursorRing"></div>
 
-    <!-- Ambient nature sound toggle -->
-    <button class="sound-toggle" id="soundToggle" type="button" aria-label="Toggle nature sounds" title="Toggle ambient nature sounds">
-      🔇
-    </button>
+    <button class="sound-toggle" id="soundToggle" type="button" aria-label="Toggle nature sounds" title="Toggle ambient nature sounds">🔇</button>
     <audio id="natureAudio" loop preload="none">
       <source src="https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3" type="audio/mpeg">
-      Your browser does not support the audio element. Nature sound playback is not available.
     </audio>
 
     <header class="site-header">
@@ -33,8 +65,7 @@
         </button>
         <ul id="nav-menu" class="nav-menu">
           <li><a href="index.html">Home</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#rooms">Rooms</a></li>
+          <li><a href="rooms.html">Rooms</a></li>
           <li><a href="#experiences">Explore</a></li>
           <li><a href="gallery.html">Gallery</a></li>
           <li><a href="about.html">About</a></li>
@@ -45,148 +76,87 @@
 
     <main>
       <section class="hero" id="home">
-
         <div class="hero-scene" id="heroScene">
           <div class="parallax-layer scene-sky" id="layerSky"></div>
           <canvas id="starCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
-          <!-- Three.js fog/mist particle layer -->
           <canvas id="threeCanvas" aria-hidden="true"></canvas>
           <div class="mist-band"></div>
           <div class="mist-band"></div>
           <div class="mist-band"></div>
           <div class="mist-band"></div>
+          <div class="mountain-fade"></div>
 
-          <!-- Kanchenjunga -->
           <div class="parallax-layer" id="layerKanche" style="position:absolute;bottom:26%;left:0;right:0;">
             <svg viewBox="0 0 1440 400" preserveAspectRatio="none" style="width:100%;display:block;">
               <defs>
+                <linearGradient id="snowFar" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+                  <stop offset="35%" stop-color="#f4f9ff" stop-opacity="0.95"/>
+                  <stop offset="65%" stop-color="#cfe0f2" stop-opacity="0.6"/>
+                  <stop offset="100%" stop-color="#a9c4df" stop-opacity="0.2"/>
+                </linearGradient>
+                <linearGradient id="peakGlow" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+                  <stop offset="40%" stop-color="#eaf4ff" stop-opacity="0.12"/>
+                  <stop offset="100%" stop-color="#000000" stop-opacity="0.08"/>
+                </linearGradient>
                 <linearGradient id="peakFar" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#1a3520"/>
-                  <stop offset="55%" stop-color="#112818"/>
-                  <stop offset="100%" stop-color="#0d1e10"/>
+                  <stop offset="0%" stop-color="#dfeaf5"/>
+                  <stop offset="40%" stop-color="#b7cde3"/>
+                  <stop offset="75%" stop-color="#8faecc"/>
+                  <stop offset="100%" stop-color="#6f8fb0"/>
                 </linearGradient>
-                <linearGradient id="snowFar" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#f0f5ee" stop-opacity="0.9"/>
-                  <stop offset="50%" stop-color="#d5e6d0" stop-opacity="0.4"/>
-                  <stop offset="100%" stop-color="#a0c0a8" stop-opacity="0"/>
-                </linearGradient>
-                <linearGradient id="peakGlow" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#E89A5B" stop-opacity="0.4"/>
-                  <stop offset="100%" stop-color="#E89A5B" stop-opacity="0"/>
-                </linearGradient>
-                <filter id="softBlur"><feGaussianBlur stdDeviation="2.5"/></filter>
+                <filter id="softBlur"><feGaussianBlur stdDeviation="0.6"/></filter>
               </defs>
-              <path fill="rgba(15,40,20,0.25)" filter="url(#softBlur)"
-                d="M0,400 L0,240 L120,155 L240,200 L360,120 L480,175 L600,95 L720,145 L840,88 L960,140 L1080,100 L1200,155 L1320,115 L1440,170 L1440,400 Z"/>
-              <path fill="url(#peakFar)" opacity="0.75"
-                d="M0,400 L0,280 L120,200 L240,240 L340,165 L420,205 L500,175 L560,400 Z"/>
-              <path fill="url(#snowFar)" opacity="0.6"
-                d="M320,165 L360,185 L420,205 L380,190 L340,165 L310,185 L280,210 L260,198 L320,165 Z"/>
-              <path fill="url(#peakFar)" opacity="0.72"
-                d="M880,400 L880,210 L940,148 L1000,175 L1070,115 L1140,158 L1210,195 L1440,280 L1440,400 Z"/>
-              <path fill="url(#snowFar)" opacity="0.55"
-                d="M1050,115 L1090,138 L1140,158 L1105,140 L1070,115 L1040,138 L1010,162 L990,148 L1050,115 Z"/>
-              <!-- Main Kanchenjunga massif -->
-              <path fill="url(#peakFar)"
-                d="M520,400 L520,238 L570,198 L615,218 L658,170 L698,192 L718,148 L748,92 L780,115 L812,92 L845,115 L880,155 L920,185 L960,400 Z"/>
-              <path fill="url(#peakGlow)"
-                d="M718,148 L748,92 L780,115 L812,92 L845,115 L835,108 L812,92 L782,110 L748,92 L722,144 Z"/>
-              <path fill="url(#snowFar)"
-                d="M718,148 L742,118 L748,92 L768,104 L780,115 L796,104 L812,92 L830,106 L845,115 L822,102 L812,92 L792,108 L780,115 L765,105 L748,92 L736,116 L718,148 Z"/>
-              <path fill="url(#snowFar)" opacity="0.65"
-                d="M638,170 L660,155 L698,192 L682,174 L658,170 L638,182 L615,218 L600,204 L638,170 Z"/>
-              <path fill="rgba(232,154,91,0.2)" d="M748,92 L746,105 L742,125 L748,92 Z"/>
-              <path fill="rgba(232,154,91,0.14)" d="M812,92 L815,104 L818,120 L812,92 Z"/>
+              <path fill="rgba(180,200,220,0.08)" d="M0,400 L0,240 L120,155 L240,200 L360,120 L480,175 L600,95 L720,145 L840,88 L960,140 L1080,100 L1200,155 L1320,115 L1440,170 L1440,400 Z"/>
+              <path fill="url(#peakFar)" opacity="0.75" d="M0,400 L0,280 L120,200 L240,240 L340,165 L420,205 L500,175 L560,400 Z"/>
+              <path fill="url(#snowFar)" opacity="0.6" d="M320,165 L360,185 L420,205 L380,190 L340,165 L310,185 L280,210 L260,198 L320,165 Z"/>
+              <path fill="url(#peakFar)" opacity="0.72" d="M880,400 L880,210 L940,148 L1000,175 L1070,115 L1140,158 L1210,195 L1440,280 L1440,400 Z"/>
+              <path fill="url(#snowFar)" opacity="0.55" d="M1050,115 L1090,138 L1140,158 L1105,140 L1070,115 L1040,138 L1010,162 L990,148 L1050,115 Z"/>
+              <path fill="url(#peakFar)" d="M520,400 L520,238 L570,198 L615,218 L658,170 L698,192 L718,148 L748,92 L780,115 L812,92 L845,115 L880,155 L920,185 L960,400 Z"/>
+              <path fill="url(#peakGlow)" d="M718,148 L748,92 L780,115 L812,92 L845,115 L835,108 L812,92 L782,110 L748,92 L722,144 Z"/>
+              <path fill="url(#snowFar)" d="M718,148 L742,118 L748,92 L768,104 L780,115 L796,104 L812,92 L830,106 L845,115 L822,102 L812,92 L792,108 L780,115 L765,105 L748,92 L736,116 L718,148 Z"/>
+              <path fill="url(#snowFar)" opacity="0.65" d="M638,170 L660,155 L698,192 L682,174 L658,170 L638,182 L615,218 L600,204 L638,170 Z"/>
+              <path fill="rgba(255,255,255,0.06)" d="M748,92 L746,105 L742,125 L748,92 Z"/>
+              <path fill="rgba(255,255,255,0.04)" d="M812,92 L815,104 L818,120 L812,92 Z"/>
             </svg>
           </div>
 
-          <!-- Mid hills -->
           <div class="parallax-layer" id="layerMid" style="position:absolute;bottom:16%;left:0;right:0;">
             <svg viewBox="0 0 1440 260" preserveAspectRatio="none" style="width:100%;display:block;">
               <defs>
                 <linearGradient id="midHill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#1a3220"/>
-                  <stop offset="100%" stop-color="#0d1e10"/>
+                  <stop offset="0%" stop-color="#c9dff5"/>
+                  <stop offset="100%" stop-color="#a8c8e8"/>
                 </linearGradient>
               </defs>
-              <path fill="url(#midHill)"
-                d="M0,260 L0,180 Q80,120 160,155 Q240,90 330,135 Q410,70 500,115 Q580,55 660,100 Q740,65 820,108 Q900,72 980,115 Q1060,80 1140,122 Q1220,88 1300,130 Q1380,100 1440,140 L1440,260 Z"/>
-              <path fill="rgba(232,154,91,0.08)"
-                d="M0,180 Q80,120 160,155 Q240,90 330,135 Q330,140 240,95 Q160,160 80,125 L0,185 Z"/>
+              <path fill="url(#midHill)" d="M0,260 L0,180 Q80,120 160,155 Q240,90 330,135 Q410,70 500,115 Q580,55 660,100 Q740,65 820,108 Q900,72 980,115 Q1060,80 1140,122 Q1220,88 1300,130 Q1380,100 1440,140 L1440,260 Z"/>
+              <path fill="rgba(232,154,91,0.08)" d="M0,180 Q80,120 160,155 Q240,90 330,135 Q330,140 240,95 Q160,160 80,125 L0,185 Z"/>
             </svg>
           </div>
 
-          <!-- Ground + trees -->
-          <div class="parallax-layer" id="layerGround" style="position:absolute;bottom:0;left:0;right:0;height:22%;">
-            <svg viewBox="0 0 1440 160" preserveAspectRatio="none" style="width:100%;display:block;">
-              <defs>
-                <linearGradient id="groundD" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#0d1e10"/>
-                  <stop offset="100%" stop-color="#050e06"/>
-                </linearGradient>
-              </defs>
-              <rect width="1440" height="160" fill="url(#groundD)"/>
-              <g fill="#071008">
-                <polygon points="0,160 16,95 32,160"/><polygon points="22,160 42,75 62,160"/>
-                <polygon points="48,160 70,88 92,160"/><polygon points="78,160 104,68 130,160"/>
-                <polygon points="115,160 146,80 177,160"/><polygon points="158,160 184,96 210,160"/>
-                <polygon points="196,160 218,108 240,160"/>
-              </g>
-              <g fill="#071008">
-                <polygon points="1200,160 1218,100 1236,160"/><polygon points="1228,160 1252,78 1276,160"/>
-                <polygon points="1262,160 1290,72 1318,160"/><polygon points="1300,160 1332,68 1364,160"/>
-                <polygon points="1348,160 1376,80 1404,160"/><polygon points="1392,160 1416,96 1440,160"/>
-              </g>
-              <g fill="#0a1a0c" opacity="0.85">
-                <polygon points="240,160 262,110 284,160"/><polygon points="270,160 298,92 326,160"/>
-                <polygon points="1110,160 1134,108 1158,160"/><polygon points="1142,160 1170,94 1198,160"/>
-              </g>
-            </svg>
-          </div>
-
-          <!-- HOUSE -->
-          <div class="parallax-layer" id="layerHouse"
-            style="position:absolute;bottom:15.5%;left:50%;transform:translateX(-50%);width:clamp(240px,22vw,320px);pointer-events:none;">
+          <div class="parallax-layer" id="layerHouse" style="position:absolute;bottom:15.5%;left:50%;transform:translateX(-50%);width:clamp(240px,22vw,320px);pointer-events:none;">
             <div style="position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:200px;height:50px;background:radial-gradient(ellipse,rgba(232,154,91,0.25) 0%,transparent 70%);pointer-events:none;"></div>
             <svg viewBox="0 0 300 230" style="width:100%;display:block;filter:drop-shadow(0 24px 52px rgba(0,0,0,0.8));">
               <defs>
-                <linearGradient id="hWall" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#7a5840"/><stop offset="100%" stop-color="#4a3525"/>
-                </linearGradient>
-                <linearGradient id="hSide" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#4a3525"/><stop offset="100%" stop-color="#3a2a1a"/>
-                </linearGradient>
-                <linearGradient id="hRoof" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#2a1e12"/><stop offset="100%" stop-color="#1a1208"/>
-                </linearGradient>
-                <linearGradient id="hRoofSide" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#1a1208"/><stop offset="100%" stop-color="#241a0e"/>
-                </linearGradient>
-                <radialGradient id="wG1" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="#ffcc44" stop-opacity="1"/>
-                  <stop offset="60%" stop-color="#ffa030" stop-opacity="0.8"/>
-                  <stop offset="100%" stop-color="#ff6600" stop-opacity="0"/>
-                </radialGradient>
-                <radialGradient id="wG2" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="#ffcc44" stop-opacity="0.95"/>
-                  <stop offset="100%" stop-color="#ffa030" stop-opacity="0"/>
-                </radialGradient>
+                <linearGradient id="hWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7a5840"/><stop offset="100%" stop-color="#4a3525"/></linearGradient>
+                <linearGradient id="hSide" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#4a3525"/><stop offset="100%" stop-color="#3a2a1a"/></linearGradient>
+                <linearGradient id="hRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2a1e12"/><stop offset="100%" stop-color="#1a1208"/></linearGradient>
+                <linearGradient id="hRoofSide" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1a1208"/><stop offset="100%" stop-color="#241a0e"/></linearGradient>
+                <radialGradient id="wG1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffcc44" stop-opacity="1"/><stop offset="60%" stop-color="#ffa030" stop-opacity="0.8"/><stop offset="100%" stop-color="#ff6600" stop-opacity="0"/></radialGradient>
+                <radialGradient id="wG2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffcc44" stop-opacity="0.95"/><stop offset="100%" stop-color="#ffa030" stop-opacity="0"/></radialGradient>
                 <filter id="wBloom"><feGaussianBlur stdDeviation="3.5" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
               </defs>
-              <!-- 3D side face -->
               <polygon fill="url(#hSide)" points="228,80 272,58 272,178 228,200"/>
               <polygon fill="url(#hRoofSide)" points="148,24 272,58 228,80 148,50"/>
-              <!-- Front wall -->
               <rect x="40" y="80" width="188" height="120" fill="url(#hWall)"/>
               <line x1="40" y1="105" x2="228" y2="105" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
               <line x1="40" y1="128" x2="228" y2="128" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
               <line x1="40" y1="151" x2="228" y2="151" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
               <line x1="40" y1="174" x2="228" y2="174" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
-              <!-- Main roof -->
               <polygon fill="url(#hRoof)" points="18,80 148,18 228,80"/>
               <line x1="148" y1="18" x2="148" y2="52" stroke="rgba(232,148,58,0.3)" stroke-width="1.5"/>
               <polyline fill="none" stroke="rgba(232,148,58,0.25)" stroke-width="1.5" points="18,80 148,18 228,80"/>
-              <!-- Balcony -->
               <rect x="40" y="78" width="188" height="5" rx="1" fill="#7a5c3a"/>
               <g fill="#6a4e30" opacity="0.7">
                 <rect x="50" y="174" width="4" height="26"/><rect x="68" y="174" width="4" height="26"/>
@@ -195,22 +165,18 @@
                 <rect x="210" y="174" width="4" height="26"/>
               </g>
               <rect x="40" y="196" width="188" height="4" rx="1" fill="#7a5c3a"/>
-              <!-- Window 1 -->
               <ellipse cx="90" cy="123" rx="32" ry="24" fill="rgba(255,160,30,0.18)"/>
               <rect x="62" y="103" width="46" height="40" rx="2" fill="#2a1e12"/>
               <rect x="64" y="105" width="42" height="36" rx="1" fill="url(#wG1)" filter="url(#wBloom)"/>
               <line x1="85" y1="105" x2="85" y2="141" stroke="rgba(20,12,4,0.4)" stroke-width="1.8"/>
               <line x1="64" y1="123" x2="106" y2="123" stroke="rgba(20,12,4,0.4)" stroke-width="1.8"/>
-              <!-- Window 2 -->
               <ellipse cx="170" cy="123" rx="32" ry="24" fill="rgba(255,160,30,0.16)"/>
               <rect x="144" y="103" width="46" height="40" rx="2" fill="#2a1e12"/>
               <rect x="146" y="105" width="42" height="36" rx="1" fill="url(#wG2)" filter="url(#wBloom)"/>
               <line x1="167" y1="105" x2="167" y2="141" stroke="rgba(20,12,4,0.4)" stroke-width="1.8"/>
               <line x1="146" y1="123" x2="188" y2="123" stroke="rgba(20,12,4,0.4)" stroke-width="1.8"/>
-              <!-- Side window -->
               <rect x="238" y="98" width="26" height="32" rx="1" fill="#2a1e12"/>
               <rect x="240" y="100" width="22" height="28" rx="1" fill="rgba(255,165,40,0.65)"/>
-              <!-- Door -->
               <rect x="170" y="148" width="38" height="52" rx="3" fill="#2a1e12"/>
               <rect x="172" y="150" width="34" height="48" rx="2" fill="#3d2a18"/>
               <rect x="174" y="153" width="14" height="18" rx="1" fill="rgba(0,0,0,0.2)"/>
@@ -218,55 +184,27 @@
               <rect x="174" y="175" width="30" height="20" rx="1" fill="rgba(0,0,0,0.18)"/>
               <circle cx="202" cy="174" r="3.5" fill="#e8943a"/>
               <circle cx="202" cy="174" r="2" fill="#f0c060"/>
-              <!-- Chimney -->
               <rect x="88" y="28" width="14" height="22" fill="#3d2d20"/>
               <rect x="86" y="26" width="18" height="5" rx="1" fill="#4a3525"/>
               <path fill="rgba(200,220,240,0.12)" d="M95,26 Q98,16 94,8 Q90,0 95,26 Z"/>
               <path fill="rgba(200,220,240,0.08)" d="M98,24 Q103,12 99,4 Q96,-2 98,24 Z"/>
-              <!-- Prayer flag -->
               <line x1="148" y1="18" x2="148" y2="4" stroke="#8b7355" stroke-width="2"/>
               <polygon points="148,4 168,9 148,14" fill="#e8943a" opacity="0.85"/>
               <line x1="148" y1="4" x2="188" y2="-2" stroke="rgba(232,148,58,0.35)" stroke-width="1" stroke-dasharray="4,3"/>
-              <!-- Ground light spill -->
               <ellipse cx="189" cy="201" rx="70" ry="10" fill="rgba(255,150,30,0.12)"/>
-            </svg>
-          </div>
-
-          <!-- Foreground foliage -->
-          <div class="parallax-layer" id="layerFront" style="position:absolute;bottom:0;left:0;right:0;pointer-events:none;">
-            <svg viewBox="0 0 1440 110" preserveAspectRatio="none" style="width:100%;display:block;">
-              <defs>
-                <linearGradient id="frontD" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#0c1c0e"/>
-                  <stop offset="100%" stop-color="#030906"/>
-                </linearGradient>
-              </defs>
-              <path fill="url(#frontD)"
-                d="M0,110 L0,50 Q28,22 56,44 Q84,10 112,38 Q140,4 168,32 Q196,16 224,42 Q252,28 280,52 Q308,36 336,58 Q364,42 392,64 Q420,48 448,68 Q476,52 504,72 Q532,56 560,74 Q588,58 614,76 L720,80 Q746,58 772,76 Q800,54 826,74 Q854,48 880,68 Q908,42 934,64 Q960,36 988,58 Q1016,28 1044,52 Q1072,16 1100,42 Q1128,4 1156,32 Q1184,10 1212,38 Q1240,22 1268,48 Q1296,28 1324,52 Q1352,36 1380,58 Q1408,44 1436,62 L1440,64 L1440,110 Z"/>
             </svg>
           </div>
 
           <div id="heroParticles" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
         </div>
 
-        <img src="images/CB690865-94CA-41C2-9709-C0EADC22BDDE.jpeg"
-          alt="Scenic view from Saipatri Homestay, Kalimpong"
-          class="hero-image" id="heroPhoto"/>
-        <div class="hero-overlay"></div>
-
         <div class="hero-content container">
-          <p class="eyebrow">Echhey, Kalimpong · 1,250 m above sea level</p>
           <h1><em>Saipatri</em><br>Homestay</h1>
           <p class="tagline">Wake up to mist, mountains &amp; mountain warmth.</p>
           <div class="hero-actions">
-            <a class="btn" href="#rooms">Explore Rooms</a>
+            <a class="btn" href="rooms.html">Explore Rooms</a>
             <a class="btn btn-secondary" href="#contact">Book Your Stay</a>
           </div>
-        </div>
-
-        <div class="kanche-label">
-          <span>Third highest peak on earth</span>
-          <strong>Kanchenjunga, 8,586 m</strong>
         </div>
 
         <div class="scroll-hint">
@@ -311,7 +249,7 @@
               </div>
             </div>
             <div class="experience-stay-image">
-              <img src="images/50195A80-31BB-44FC-83EF-65C56B9D6E10_1_102_o.jpeg" alt="Morning mist view from Saipatri Homestay balcony" loading="lazy"/>
+              <img src="images/5.jpeg" alt="Morning mist view from Saipatri Homestay balcony" loading="lazy"/>
               <div class="address-card">
                 <p class="address-label">Find Us</p>
                 <address>
@@ -326,57 +264,6 @@
         </div>
       </section>
 
-      <!-- ROOMS & VIEWS -->
-      <section class="section rooms-section" id="rooms">
-        <div class="container">
-          <div class="section-heading">
-            <p class="eyebrow">Stay</p>
-            <h2>Rooms &amp; Views</h2>
-          </div>
-          <div class="rooms-grid">
-            <article class="room-card">
-              <div class="room-img-wrap">
-                <img src="images/3F941B21-92B0-4D2B-937E-429507DBAF80.jpeg" alt="Standard room at Saipatri Homestay" loading="lazy"/>
-                <div class="room-badge">Forest View</div>
-              </div>
-              <div class="room-content">
-                <h3>Standard Room</h3>
-                <p>Cozy timber-lined room for a peaceful mountain night, with handwoven textiles and warm pine floors.</p>
-                <p class="price">₹1,499 <small>/ person / night</small></p>
-                <p class="price-note">Incl. breakfast, lunch &amp; dinner</p>
-                <a class="btn small" href="#contact">Enquire</a>
-              </div>
-            </article>
-            <article class="room-card">
-              <div class="room-img-wrap">
-                <img src="images/67D08D96-24BC-4846-9E16-A90A7CB16D65.jpeg" alt="Deluxe valley view room" loading="lazy"/>
-                <div class="room-badge">Valley View</div>
-              </div>
-              <div class="room-content">
-                <h3>Deluxe Valley-View</h3>
-                <p>Wake to drifting clouds and layered hills at dawn, with panoramic windows facing the valley.</p>
-                <p class="price">₹1,499 <small>/ person / night</small></p>
-                <p class="price-note">Incl. breakfast, lunch &amp; dinner</p>
-                <a class="btn small" href="#contact">Enquire</a>
-              </div>
-            </article>
-            <article class="room-card">
-              <div class="room-img-wrap">
-                <img src="images/C01914B1-1D02-459B-A104-D205009B221E.jpeg" alt="Family suite at Saipatri Homestay" loading="lazy"/>
-                <div class="room-badge">Kanchenjunga View</div>
-              </div>
-              <div class="room-content">
-                <h3>Family Suite</h3>
-                <p>Spacious suite with a private sit-out facing Kanchenjunga on clear Himalayan mornings.</p>
-                <p class="price">₹1,499 <small>/ person / night</small></p>
-                <p class="price-note">Incl. breakfast, lunch &amp; dinner</p>
-                <a class="btn small" href="#contact">Enquire</a>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
       <!-- LOCAL EXPERIENCES -->
       <section class="section experiences-section" id="experiences">
         <div class="container">
@@ -385,26 +272,517 @@
             <h2>Local Experiences</h2>
           </div>
           <div class="experiences-row">
+
+            <!-- ── TILE 01: Fresh Flowers ── bright daytime garden -->
             <article class="experience-tile">
               <span class="exp-num">01</span>
-              <img src="images/EC83723D-78D1-4B79-96E9-9F75B94DBA7B.jpeg" alt="Tea gardens near Kalimpong" loading="lazy"/>
-              <div class="overlay"><h3>Tea Gardens</h3><p>Walk through lush green terraced tea gardens that carpet the hillsides around Kalimpong. Witness the age-old art of tea plucking, learn about processing, and savour the freshest first-flush teas with our hosts.</p></div>
+              <svg class="exp-svg-illustration" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <style>
+                  @keyframes fl-sway1 { 0%,100%{transform:rotate(-5deg)} 50%{transform:rotate(5deg)} }
+                  @keyframes fl-sway2 { 0%,100%{transform:rotate(4deg)}  50%{transform:rotate(-4deg)} }
+                  @keyframes fl-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+                  @keyframes fl-leaf  { 0%,100%{transform:rotate(-4deg)} 50%{transform:rotate(4deg)} }
+                  @keyframes fl-fall  { 0%{transform:translate(0,0) rotate(0deg);opacity:.9} 100%{transform:translate(18px,85px) rotate(230deg);opacity:0} }
+                  @keyframes fl-cloud { 0%{transform:translateX(0)} 100%{transform:translateX(10px)} }
+                  @keyframes fl-bee   { 0%,100%{transform:translate(0,0)} 25%{transform:translate(8px,-5px)} 50%{transform:translate(15px,2px)} 75%{transform:translate(6px,7px)} }
+                  @keyframes fl-wing  { 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(0.25)} }
+                </style>
+
+                <!-- Sky: cheerful light blue -->
+                <rect width="300" height="400" fill="#a8d8f0"/>
+                <!-- Bright sun -->
+                <circle cx="258" cy="52" r="40" fill="#ffe060" opacity=".92"/>
+                <circle cx="258" cy="52" r="28" fill="#fff5a0"/>
+                <!-- Sun rays -->
+                <line x1="258" y1="6"  x2="258" y2="-2"  stroke="#ffe060" stroke-width="3" stroke-linecap="round"/>
+                <line x1="258" y1="98" x2="258" y2="106" stroke="#ffe060" stroke-width="3" stroke-linecap="round"/>
+                <line x1="212" y1="52" x2="204" y2="52"  stroke="#ffe060" stroke-width="3" stroke-linecap="round"/>
+                <line x1="284" y1="26" x2="290" y2="20"  stroke="#ffe060" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="284" y1="78" x2="290" y2="84"  stroke="#ffe060" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="232" y1="26" x2="226" y2="20"  stroke="#ffe060" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="232" y1="78" x2="226" y2="84"  stroke="#ffe060" stroke-width="2.5" stroke-linecap="round"/>
+
+                <!-- Clouds -->
+                <ellipse cx="78"  cy="62"  rx="54" ry="18" fill="rgba(255,255,255,.82)" style="animation:fl-cloud 10s ease-in-out alternate infinite"/>
+                <ellipse cx="52"  cy="70"  rx="32" ry="14" fill="rgba(255,255,255,.7)"  style="animation:fl-cloud 10s ease-in-out alternate infinite"/>
+                <ellipse cx="108" cy="70"  rx="28" ry="12" fill="rgba(255,255,255,.7)"  style="animation:fl-cloud 10s ease-in-out alternate infinite"/>
+                <ellipse cx="192" cy="48"  rx="40" ry="14" fill="rgba(255,255,255,.65)" style="animation:fl-cloud 12s ease-in-out alternate infinite 1.5s"/>
+                <ellipse cx="172" cy="56"  rx="26" ry="11" fill="rgba(255,255,255,.55)" style="animation:fl-cloud 12s ease-in-out alternate infinite 1.5s"/>
+
+                <!-- Rich green ground -->
+                <rect y="302" width="300" height="98" fill="#3a8c2a"/>
+                <rect y="300" width="300" height="14" fill="#4aa838"/>
+                <!-- Grass tips -->
+                <path d="M0,302 Q8,284 16,302 Q24,284 32,302 Q40,284 48,302 Q56,284 64,302 Q72,284 80,302 Q88,284 96,302 Q104,284 112,302 Q120,284 128,302 Q136,284 144,302 Q152,284 160,302 Q168,284 176,302 Q184,284 192,302 Q200,284 208,302 Q216,284 224,302 Q232,284 240,302 Q248,284 256,302 Q264,284 272,302 Q280,284 288,302 Q296,284 300,298" fill="none" stroke="#5cc045" stroke-width="1.8"/>
+
+                <!-- Wooden fence -->
+                <g fill="#b08848">
+                  <rect x="0"   y="270" width="11" height="40" rx="2"/>
+                  <rect x="24"  y="268" width="11" height="42" rx="2"/>
+                  <rect x="48"  y="270" width="11" height="40" rx="2"/>
+                  <rect x="72"  y="268" width="11" height="42" rx="2"/>
+                  <rect x="96"  y="270" width="11" height="40" rx="2"/>
+                  <rect x="120" y="268" width="11" height="42" rx="2"/>
+                  <rect x="144" y="270" width="11" height="40" rx="2"/>
+                  <rect x="168" y="268" width="11" height="42" rx="2"/>
+                  <rect x="192" y="270" width="11" height="40" rx="2"/>
+                  <rect x="216" y="268" width="11" height="42" rx="2"/>
+                  <rect x="240" y="270" width="11" height="40" rx="2"/>
+                  <rect x="264" y="268" width="11" height="42" rx="2"/>
+                  <rect x="288" y="270" width="12" height="40" rx="2"/>
+                </g>
+                <!-- Fence rail -->
+                <rect x="0" y="280" width="300" height="8" rx="2" fill="#907028"/>
+
+                <!-- FLOWER 1: tall centre orange marigold -->
+                <g style="transform-origin:148px 302px;animation:fl-float 3.8s ease-in-out infinite .1s">
+                  <line x1="148" y1="302" x2="148" y2="178" stroke="#2e7a1e" stroke-width="4.5"/>
+                  <ellipse cx="132" cy="248" rx="22" ry="8" fill="#3aaa28" transform="rotate(-18 132 248)" style="animation:fl-leaf 3s ease-in-out infinite"/>
+                  <ellipse cx="165" cy="225" rx="22" ry="8" fill="#3aaa28" transform="rotate(18 165 225)"  style="animation:fl-leaf 3.5s ease-in-out infinite .5s"/>
+                  <!-- Petals -->
+                  <g style="transform-origin:148px 178px;animation:fl-sway1 4.5s ease-in-out infinite">
+                    <ellipse cx="148" cy="155" rx="14" ry="25" fill="#f59820" opacity=".95"/>
+                    <ellipse cx="148" cy="155" rx="14" ry="25" fill="#f59820" opacity=".95" transform="rotate(45 148 178)"/>
+                    <ellipse cx="148" cy="155" rx="14" ry="25" fill="#f59820" opacity=".95" transform="rotate(90 148 178)"/>
+                    <ellipse cx="148" cy="155" rx="14" ry="25" fill="#f59820" opacity=".95" transform="rotate(135 148 178)"/>
+                    <ellipse cx="148" cy="155" rx="14" ry="25" fill="#d87808" opacity=".85" transform="rotate(22.5 148 178)"/>
+                    <ellipse cx="148" cy="155" rx="14" ry="25" fill="#d87808" opacity=".85" transform="rotate(67.5 148 178)"/>
+                    <ellipse cx="148" cy="155" rx="14" ry="25" fill="#d87808" opacity=".85" transform="rotate(112.5 148 178)"/>
+                    <ellipse cx="148" cy="155" rx="14" ry="25" fill="#d87808" opacity=".85" transform="rotate(157.5 148 178)"/>
+                    <circle cx="148" cy="178" r="20" fill="#f5c828"/>
+                    <circle cx="148" cy="178" r="13" fill="#d89810"/>
+                    <circle cx="144" cy="174" r="3.5" fill="#b07000"/>
+                    <circle cx="152" cy="174" r="3.5" fill="#b07000"/>
+                    <circle cx="148" cy="170" r="3.5" fill="#b07000"/>
+                    <circle cx="148" cy="180" r="3.5" fill="#b07000"/>
+                  </g>
+                </g>
+
+                <!-- FLOWER 2: left hot pink -->
+                <g style="transform-origin:72px 305px;animation:fl-float 4.2s ease-in-out infinite .6s">
+                  <line x1="72" y1="305" x2="75" y2="205" stroke="#2e7a1e" stroke-width="4"/>
+                  <ellipse cx="58" cy="256" rx="19" ry="7" fill="#3aaa28" transform="rotate(-20 58 256)" style="animation:fl-leaf 3.2s ease-in-out infinite"/>
+                  <g style="transform-origin:75px 205px;animation:fl-sway2 5s ease-in-out infinite .8s">
+                    <ellipse cx="75" cy="184" rx="12" ry="22" fill="#f02880" opacity=".95"/>
+                    <ellipse cx="75" cy="184" rx="12" ry="22" fill="#f02880" opacity=".95" transform="rotate(60 75 205)"/>
+                    <ellipse cx="75" cy="184" rx="12" ry="22" fill="#f02880" opacity=".95" transform="rotate(120 75 205)"/>
+                    <ellipse cx="75" cy="184" rx="12" ry="22" fill="#c00860" opacity=".85" transform="rotate(30 75 205)"/>
+                    <ellipse cx="75" cy="184" rx="12" ry="22" fill="#c00860" opacity=".85" transform="rotate(90 75 205)"/>
+                    <ellipse cx="75" cy="184" rx="12" ry="22" fill="#c00860" opacity=".85" transform="rotate(150 75 205)"/>
+                    <circle cx="75" cy="205" r="12" fill="#f8d840"/>
+                    <circle cx="75" cy="205" r="7"  fill="#d89810"/>
+                  </g>
+                </g>
+
+                <!-- FLOWER 3: right lavender/purple -->
+                <g style="transform-origin:225px 302px;animation:fl-float 3.5s ease-in-out infinite 1.2s">
+                  <line x1="225" y1="302" x2="222" y2="198" stroke="#2e7a1e" stroke-width="4"/>
+                  <ellipse cx="238" cy="250" rx="19" ry="7" fill="#3aaa28" transform="rotate(22 238 250)" style="animation:fl-leaf 4s ease-in-out infinite .3s"/>
+                  <g style="transform-origin:222px 198px;animation:fl-sway1 5.2s ease-in-out infinite .4s">
+                    <ellipse cx="222" cy="177" rx="12" ry="22" fill="#a060e0" opacity=".95"/>
+                    <ellipse cx="222" cy="177" rx="12" ry="22" fill="#a060e0" opacity=".95" transform="rotate(60 222 198)"/>
+                    <ellipse cx="222" cy="177" rx="12" ry="22" fill="#a060e0" opacity=".95" transform="rotate(120 222 198)"/>
+                    <ellipse cx="222" cy="177" rx="12" ry="22" fill="#7840b8" opacity=".85" transform="rotate(30 222 198)"/>
+                    <ellipse cx="222" cy="177" rx="12" ry="22" fill="#7840b8" opacity=".85" transform="rotate(90 222 198)"/>
+                    <ellipse cx="222" cy="177" rx="12" ry="22" fill="#7840b8" opacity=".85" transform="rotate(150 222 198)"/>
+                    <circle cx="222" cy="198" r="12" fill="#fff8d0"/>
+                    <circle cx="222" cy="198" r="7"  fill="#f0d040"/>
+                  </g>
+                </g>
+
+                <!-- Accent small flowers -->
+                <g style="animation:fl-float 4.8s ease-in-out infinite 1.5s">
+                  <line x1="35" y1="308" x2="37" y2="250" stroke="#2e7a1e" stroke-width="3"/>
+                  <circle cx="37" cy="246" r="14" fill="#e83030" opacity=".92"/>
+                  <circle cx="37" cy="246" r="8"  fill="#f5d040"/>
+                </g>
+                <g style="animation:fl-float 3.9s ease-in-out infinite .9s">
+                  <line x1="268" y1="306" x2="265" y2="245" stroke="#2e7a1e" stroke-width="3"/>
+                  <circle cx="265" cy="241" r="14" fill="#ff8020" opacity=".92"/>
+                  <circle cx="265" cy="241" r="8"  fill="#f5d040"/>
+                </g>
+                <g style="animation:fl-float 4.3s ease-in-out infinite 2s">
+                  <line x1="108" y1="306" x2="110" y2="252" stroke="#2e7a1e" stroke-width="2.5"/>
+                  <circle cx="110" cy="248" r="11" fill="#ff4080" opacity=".88"/>
+                  <circle cx="110" cy="248" r="6"  fill="#f5d848"/>
+                </g>
+                <g style="animation:fl-float 4s ease-in-out infinite 1.8s">
+                  <line x1="188" y1="306" x2="185" y2="252" stroke="#2e7a1e" stroke-width="2.5"/>
+                  <circle cx="185" cy="248" r="11" fill="#30c840" opacity=".88"/>
+                  <circle cx="185" cy="248" r="6"  fill="#f5d848"/>
+                </g>
+
+                <!-- Falling petals -->
+                <ellipse cx="108" cy="122" rx="6" ry="10" fill="#f59820" opacity=".82" transform="rotate(32 108 122)"  style="animation:fl-fall 3.8s linear infinite"/>
+                <ellipse cx="192" cy="105" rx="5" ry="9"  fill="#f02880" opacity=".76" transform="rotate(-28 192 105)" style="animation:fl-fall 4.8s linear infinite 1.2s"/>
+                <ellipse cx="58"  cy="148" rx="5" ry="8"  fill="#a060e0" opacity=".7"  style="animation:fl-fall 3.2s linear infinite 2.2s"/>
+                <ellipse cx="248" cy="138" rx="4" ry="8"  fill="#f59820" opacity=".66" transform="rotate(18 248 138)"  style="animation:fl-fall 5s linear infinite 0.5s"/>
+
+                <!-- Bee -->
+                <g style="animation:fl-bee 4.2s ease-in-out infinite">
+                  <ellipse cx="188" cy="152" rx="8" ry="5.5" fill="#f5c830"/>
+                  <rect x="183" y="150" width="4.5" height="4" rx="1" fill="#1a1800"/>
+                  <rect x="190" y="150" width="4.5" height="4" rx="1" fill="#1a1800"/>
+                  <line x1="183" y1="150" x2="182" y2="146" stroke="#1a1800" stroke-width="1"/>
+                  <line x1="186" y1="150" x2="185" y2="146" stroke="#1a1800" stroke-width="1"/>
+                  <ellipse cx="184" cy="145" rx="4.5" ry="3.5" fill="rgba(255,255,255,.75)" style="animation:fl-wing 0.18s linear infinite"/>
+                  <ellipse cx="192" cy="145" rx="4.5" ry="3.5" fill="rgba(255,255,255,.75)" style="animation:fl-wing 0.18s linear infinite .09s"/>
+                </g>
+              </svg>
+              <div class="overlay">
+                <h3>Fresh Flowers</h3>
+                <p>Geeta grows and sells a beautiful selection of fresh flowers from the homestay garden — marigolds, seasonal blooms, and more. A piece of the hills to take home or offer at a nearby temple.</p>
+                <span class="exp-price-badge">Prices upon request</span>
+              </div>
             </article>
+
+            <!-- ── TILE 02: Home-Cooked Meals ── warm bright kitchen -->
             <article class="experience-tile">
               <span class="exp-num">02</span>
-              <img src="images/D3171CE0-F08B-444B-8A4C-957435D5EC69.jpeg" alt="Local cuisine at Saipatri Homestay" loading="lazy"/>
+              <svg class="exp-svg-illustration" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <style>
+                  @keyframes mk-steam   { 0%{opacity:0;transform:translateY(0) scaleX(1)} 40%{opacity:.65;transform:translateY(-14px) scaleX(1.5)} 100%{opacity:0;transform:translateY(-30px) scaleX(.65)} }
+                  @keyframes mk-flicker { 0%,100%{transform:scaleX(1) scaleY(1)} 33%{transform:scaleX(.72) scaleY(1.2)} 66%{transform:scaleX(1.15) scaleY(.85)} }
+                  @keyframes mk-leaf    { 0%,100%{transform:rotate(-4deg)} 50%{transform:rotate(4deg)} }
+                  @keyframes mk-drift   { 0%{transform:translateX(0)} 100%{transform:translateX(7px)} }
+                </style>
+
+                <!-- Warm ochre kitchen wall -->
+                <rect width="300" height="400" fill="#f0d890"/>
+                <!-- Kitchen wall tiles strip -->
+                <rect x="0" y="130" width="300" height="40" fill="#e8cc78"/>
+                <line x1="0" y1="130" x2="300" y2="130" stroke="#c8a848" stroke-width="1.5"/>
+                <line x1="0" y1="170" x2="300" y2="170" stroke="#c8a848" stroke-width="1.5"/>
+                <line x1="50"  y1="130" x2="50"  y2="170" stroke="#c8a848" stroke-width="1"/>
+                <line x1="100" y1="130" x2="100" y2="170" stroke="#c8a848" stroke-width="1"/>
+                <line x1="150" y1="130" x2="150" y2="170" stroke="#c8a848" stroke-width="1"/>
+                <line x1="200" y1="130" x2="200" y2="170" stroke="#c8a848" stroke-width="1"/>
+                <line x1="250" y1="130" x2="250" y2="170" stroke="#c8a848" stroke-width="1"/>
+
+                <!-- Window top left -->
+                <rect x="18" y="22" width="92" height="75" rx="4" fill="#a0cce8"/>
+                <rect x="20" y="24" width="88" height="71" rx="3" fill="#c0e0f8"/>
+                <!-- Mountain in window -->
+                <path d="M18,97 L18,72 Q35,50 52,65 Q65,42 78,58 Q92,36 109,55 L110,97Z" fill="#7aabcf" opacity=".75"/>
+                <path d="M52,65 L64,50 Q71,57 78,58 L68,68Z" fill="rgba(255,255,255,.5)"/>
+                <path d="M92,38 L100,50 Q105,57 109,55 L105,65Z" fill="rgba(255,255,255,.45)"/>
+                <!-- Mist in window -->
+                <rect x="18" y="85" width="92" height="14" fill="rgba(255,255,255,.35)"/>
+                <!-- Window frame & cross -->
+                <rect x="18" y="22" width="92" height="75" rx="4" fill="none" stroke="#8a6828" stroke-width="3"/>
+                <line x1="64"  y1="22" x2="64"  y2="97" stroke="#8a6828" stroke-width="2"/>
+                <line x1="18"  y1="60" x2="110" y2="60" stroke="#8a6828" stroke-width="2"/>
+                <!-- Small plant on sill -->
+                <rect x="24" y="90" width="16" height="12" rx="2" fill="#c06828"/>
+                <ellipse cx="32" cy="88" rx="11" ry="5" fill="#3aaa28"/>
+                <path d="M29,88 Q32,74 35,88" fill="none" stroke="#2e7a1e" stroke-width="2" stroke-linecap="round"/>
+                <path d="M33,86 Q39,75 40,84" fill="none" stroke="#2e7a1e" stroke-width="2" stroke-linecap="round"/>
+
+                <!-- Wooden table -->
+                <rect x="15" y="265" width="270" height="110" rx="6" fill="#9a6838"/>
+                <rect x="15" y="265" width="270" height="12"  rx="6" fill="#b07e48"/>
+                <line x1="15" y1="282" x2="285" y2="282" stroke="rgba(0,0,0,.06)" stroke-width="1.5"/>
+                <line x1="15" y1="298" x2="285" y2="298" stroke="rgba(0,0,0,.06)" stroke-width="1.5"/>
+                <line x1="15" y1="314" x2="285" y2="314" stroke="rgba(0,0,0,.06)" stroke-width="1.5"/>
+
+                <!-- Bamboo steamer (3 tiers) -->
+                <!-- Bottom rim -->
+                <ellipse cx="150" cy="258" rx="72" ry="18" fill="#7a5020"/>
+                <!-- Tier 2 body -->
+                <rect x="78"  y="208" width="144" height="52" rx="6" fill="#c09028"/>
+                <ellipse cx="150" cy="208" rx="72" ry="18" fill="#d4a040"/>
+                <!-- Tier 1 body -->
+                <rect x="80"  y="160" width="140" height="50" rx="6" fill="#b88020"/>
+                <ellipse cx="150" cy="160" rx="70" ry="17" fill="#c89030"/>
+                <!-- Lid -->
+                <ellipse cx="150" cy="144" rx="73" ry="20" fill="#9a6e18"/>
+                <ellipse cx="150" cy="140" rx="73" ry="20" fill="#c08828"/>
+                <ellipse cx="150" cy="137" rx="22" ry="9"  fill="#9a6e18"/>
+                <!-- Momos visible -->
+                <ellipse cx="120" cy="160" rx="17" ry="9" fill="#f0e8d0"/>
+                <path d="M105,160 Q120,149 135,160" fill="none" stroke="#d4c0a0" stroke-width="2"/>
+                <ellipse cx="150" cy="155" rx="17" ry="9" fill="#f0e8d0"/>
+                <path d="M135,155 Q150,144 165,155" fill="none" stroke="#d4c0a0" stroke-width="2"/>
+                <ellipse cx="180" cy="160" rx="17" ry="9" fill="#f0e8d0"/>
+                <path d="M165,160 Q180,149 195,160" fill="none" stroke="#d4c0a0" stroke-width="2"/>
+                <!-- Bamboo weave detail -->
+                <line x1="78"  y1="220" x2="222" y2="220" stroke="rgba(0,0,0,.1)" stroke-width="1.5"/>
+                <line x1="78"  y1="232" x2="222" y2="232" stroke="rgba(0,0,0,.1)" stroke-width="1.5"/>
+                <line x1="80"  y1="172" x2="220" y2="172" stroke="rgba(0,0,0,.1)" stroke-width="1.5"/>
+                <line x1="80"  y1="184" x2="220" y2="184" stroke="rgba(0,0,0,.1)" stroke-width="1.5"/>
+
+                <!-- Steam from steamer -->
+                <path d="M118,138 Q121,122 117,106 Q113,90 117,74"  fill="none" stroke="rgba(255,255,255,.65)" stroke-width="3.5" stroke-linecap="round" style="animation:mk-steam 2.2s ease-in-out infinite"/>
+                <path d="M150,133 Q153,117 149,101 Q145,85 149,69"  fill="none" stroke="rgba(255,255,255,.58)" stroke-width="3.5" stroke-linecap="round" style="animation:mk-steam 2.2s ease-in-out infinite .7s"/>
+                <path d="M182,138 Q185,122 181,106 Q177,90 181,74" fill="none" stroke="rgba(255,255,255,.52)" stroke-width="3.5" stroke-linecap="round" style="animation:mk-steam 2.2s ease-in-out infinite 1.4s"/>
+
+                <!-- Chai in terracotta kulhad -->
+                <rect x="208" y="255" width="50" height="36" rx="10" fill="#b06020"/>
+                <rect x="210" y="257" width="46" height="32" rx="9"  fill="#cc7830"/>
+                <ellipse cx="233" cy="257" rx="23" ry="7"  fill="#e08840"/>
+                <path d="M259,266 Q270,273 259,286" fill="none" stroke="#b06020" stroke-width="4" stroke-linecap="round"/>
+                <!-- Chai steam -->
+                <path d="M224,250 Q226,240 224,230" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2" stroke-linecap="round" style="animation:mk-steam 2.8s ease-in-out infinite .2s"/>
+                <path d="M233,247 Q235,237 233,227" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round" style="animation:mk-steam 2.8s ease-in-out infinite .9s"/>
+
+                <!-- Chutney bowl (bright red) -->
+                <ellipse cx="52" cy="276" rx="34" ry="11" fill="#902820"/>
+                <ellipse cx="52" cy="270" rx="34" ry="11" fill="#b83828"/>
+                <ellipse cx="52" cy="265" rx="28" ry="8"  fill="#e03020"/>
+
+                <!-- Herb garnish (bright green) -->
+                <g style="animation:mk-leaf 3.5s ease-in-out infinite">
+                  <line x1="148" y1="153" x2="148" y2="130" stroke="#2e7a1e" stroke-width="2.5"/>
+                  <ellipse cx="142" cy="142" rx="8" ry="4" fill="#3aaa28"/>
+                  <ellipse cx="156" cy="136" rx="8" ry="4" fill="#2e7a1e"/>
+                </g>
+
+                <!-- Spice rack on wall (right) -->
+                <rect x="170" y="20" width="118" height="9" rx="2" fill="#8a6028"/>
+                <rect x="172" y="29" width="24" height="38" rx="3" fill="#e06820"/>
+                <rect x="202" y="29" width="24" height="30" rx="3" fill="#c85820"/>
+                <rect x="232" y="29" width="24" height="44" rx="3" fill="#d07020"/>
+                <rect x="262" y="29" width="24" height="34" rx="3" fill="#c86028"/>
+                <ellipse cx="184" cy="29" rx="12" ry="5" fill="#c05818"/>
+                <ellipse cx="214" cy="29" rx="12" ry="5" fill="#a84818"/>
+                <ellipse cx="244" cy="29" rx="12" ry="5" fill="#b86020"/>
+                <ellipse cx="274" cy="29" rx="12" ry="5" fill="#a85818"/>
+              </svg>
               <div class="overlay"><h3>Home-Cooked Meals</h3><p>Savour freshly prepared Nepali and Kalimpong hill cuisine — steaming momos, thukpa, gundruk, and seasonal vegetables sourced from the local market and our own kitchen garden.</p></div>
             </article>
+
+            <!-- ── TILE 03: Village Walks ── bright mountain day -->
             <article class="experience-tile">
               <span class="exp-num">03</span>
-              <img src="images/DE110AD1-A317-4B47-87FE-69401F2103F6.jpeg" alt="Village walk in Kalimpong" loading="lazy"/>
+              <svg class="exp-svg-illustration" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <style>
+                  @keyframes vw-leaf  { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+                  @keyframes vw-walk  { 0%{transform:translateX(0)} 100%{transform:translateX(22px)} }
+                  @keyframes vw-cloud { 0%{transform:translateX(0)} 100%{transform:translateX(12px)} }
+                  @keyframes vw-flag  { 0%,100%{transform:skewX(-4deg)} 50%{transform:skewX(7deg)} }
+                  @keyframes vw-bird  { 0%{transform:translate(0,0)} 100%{transform:translate(48px,-8px)} }
+                </style>
+
+                <!-- Sky: vivid Himalayan blue -->
+                <rect width="300" height="400" fill="#78c0e8"/>
+                <rect width="300" height="170" fill="#5aaad8"/>
+
+                <!-- Snowy peaks bright white -->
+                <path d="M0,170 L0,105 L48,62 L90,88 L128,52 L164,76 L200,42 L236,68 L272,46 L300,68 L300,170Z" fill="#d8eef8"/>
+                <!-- Snow highlights -->
+                <path d="M128,52 L146,68 L164,76 L150,62 L128,52 L112,68 L94,85 L86,77Z" fill="rgba(255,255,255,.8)"/>
+                <path d="M200,42 L218,58 L236,68 L222,54 L200,42 L184,58 L167,74 L158,65Z" fill="rgba(255,255,255,.75)"/>
+                <path d="M272,46 L285,60 L300,68 L290,57 L272,46 L258,60 L246,72 L240,64Z" fill="rgba(255,255,255,.7)"/>
+                <!-- Peak rock faces -->
+                <path d="M0,170 L0,108 L48,65 L90,90 L128,55 L164,78 L200,44 L236,70 L272,48 L300,70 L300,170Z" fill="none" stroke="rgba(180,220,240,.3)" stroke-width="1"/>
+
+                <!-- Mid green terraced hills -->
+                <path d="M0,210 Q60,178 120,195 Q180,165 240,185 Q270,170 300,180 L300,400 L0,400Z" fill="#4a9a30"/>
+                <path d="M0,245 Q80,220 150,238 Q220,218 300,235 L300,400 L0,400Z" fill="#3a8420"/>
+                <!-- Terrace lines -->
+                <path d="M0,218 Q80,205 160,215 Q230,205 300,212" fill="none" stroke="rgba(80,140,40,.4)" stroke-width="1.5"/>
+                <path d="M0,232 Q80,220 160,228 Q230,218 300,226" fill="none" stroke="rgba(80,140,40,.4)" stroke-width="1.5"/>
+                <!-- Ground -->
+                <path d="M0,300 Q100,282 200,296 Q260,285 300,295 L300,400 L0,400Z" fill="#5aac38"/>
+                <!-- Dirt path, winding -->
+                <path d="M118,400 Q130,358 136,328 Q141,305 138,285" fill="none" stroke="rgba(190,155,90,.45)" stroke-width="14"/>
+                <path d="M118,400 Q130,358 136,328 Q141,305 138,285" fill="none" stroke="rgba(210,180,115,.28)" stroke-width="8"/>
+
+                <!-- Monastery / Gompa (bright coloured) -->
+                <rect x="105" y="228" width="90" height="62" rx="3" fill="#f5e8b0"/>
+                <rect x="105" y="228" width="90" height="14" fill="#d4a820"/>
+                <path d="M102,228 L150,204 L198,228Z" fill="#b89018"/>
+                <!-- Gompa details -->
+                <rect x="132" y="238" width="36" height="52" rx="2" fill="#eed8a0"/>
+                <rect x="138" y="255" width="24" height="35" rx="2" fill="#8a5420"/>
+                <rect x="140" y="257" width="20" height="31" rx="1" fill="#6a3808"/>
+                <rect x="108" y="240" width="18" height="14" rx="1" fill="#a8d4f8"/>
+                <rect x="174" y="240" width="18" height="14" rx="1" fill="#a8d4f8"/>
+                <!-- White painted base -->
+                <rect x="105" y="278" width="90" height="12" fill="#f8f0e0"/>
+                <!-- Bell tower -->
+                <rect x="144" y="196" width="12" height="10" fill="#c89820"/>
+                <ellipse cx="150" cy="196" rx="8" ry="5" fill="#d4a820"/>
+                <!-- Prayer flag pole -->
+                <line x1="150" y1="204" x2="150" y2="186" stroke="#8a6028" stroke-width="2.5"/>
+                <!-- Prayer flags string (bright) -->
+                <line x1="105" y1="196" x2="198" y2="192" stroke="rgba(80,50,10,.35)" stroke-width="1"/>
+                <rect x="109" y="193" width="10" height="7" rx="1" fill="#e83030" style="animation:vw-flag 1.8s ease-in-out infinite"/>
+                <rect x="124" y="192" width="10" height="7" rx="1" fill="#f8e030" style="animation:vw-flag 1.8s ease-in-out infinite .3s"/>
+                <rect x="139" y="191" width="10" height="7" rx="1" fill="#3080e8" style="animation:vw-flag 1.8s ease-in-out infinite .6s"/>
+                <rect x="154" y="191" width="10" height="7" rx="1" fill="#30b830" style="animation:vw-flag 1.8s ease-in-out infinite .9s"/>
+                <rect x="169" y="192" width="10" height="7" rx="1" fill="#e88020" style="animation:vw-flag 1.8s ease-in-out infinite 1.2s"/>
+                <rect x="184" y="193" width="10" height="7" rx="1" fill="#e83030" style="animation:vw-flag 1.8s ease-in-out infinite 1.5s"/>
+
+                <!-- Trees -->
+                <g style="animation:vw-leaf 4s ease-in-out infinite .2s">
+                  <line x1="52" y1="312" x2="52" y2="260" stroke="#2e6e18" stroke-width="5.5"/>
+                  <ellipse cx="52" cy="244" rx="28" ry="34" fill="#3a9428"/>
+                  <ellipse cx="52" cy="232" rx="20" ry="24" fill="#48b030"/>
+                </g>
+                <g style="animation:vw-leaf 5s ease-in-out infinite .8s">
+                  <line x1="25" y1="318" x2="25" y2="282" stroke="#2e6e18" stroke-width="4"/>
+                  <ellipse cx="25" cy="268" rx="20" ry="24" fill="#348020"/>
+                  <ellipse cx="25" cy="258" rx="14" ry="17" fill="#3a9428"/>
+                </g>
+                <g style="animation:vw-leaf 4.5s ease-in-out infinite 1.2s">
+                  <line x1="252" y1="310" x2="252" y2="260" stroke="#2e6e18" stroke-width="5.5"/>
+                  <ellipse cx="252" cy="244" rx="28" ry="34" fill="#3a9428"/>
+                  <ellipse cx="252" cy="232" rx="20" ry="24" fill="#48b030"/>
+                </g>
+                <g style="animation:vw-leaf 3.8s ease-in-out infinite .5s">
+                  <line x1="278" y1="315" x2="278" y2="280" stroke="#2e6e18" stroke-width="4"/>
+                  <ellipse cx="278" cy="266" rx="19" ry="23" fill="#348020"/>
+                  <ellipse cx="278" cy="256" rx="13" ry="16" fill="#3a9428"/>
+                </g>
+
+                <!-- Walking figures (warmer skin tones, visible) -->
+                <g style="animation:vw-walk 3.5s ease-in-out alternate infinite">
+                  <circle cx="135" cy="342" r="8" fill="#d4a068"/>
+                  <line x1="135" y1="350" x2="135" y2="376" stroke="#8a5828" stroke-width="3.5"/>
+                  <line x1="135" y1="360" x2="126" y2="370" stroke="#8a5828" stroke-width="3"/>
+                  <line x1="135" y1="360" x2="144" y2="370" stroke="#8a5828" stroke-width="3"/>
+                  <line x1="135" y1="376" x2="130" y2="388" stroke="#8a5828" stroke-width="3"/>
+                  <line x1="135" y1="376" x2="140" y2="388" stroke="#8a5828" stroke-width="3"/>
+                </g>
+                <g style="animation:vw-walk 3.5s ease-in-out alternate infinite .6s">
+                  <circle cx="150" cy="357" r="6.5" fill="#b88850"/>
+                  <line x1="150" y1="363" x2="150" y2="385" stroke="#7a4820" stroke-width="3"/>
+                  <line x1="150" y1="372" x2="143" y2="380" stroke="#7a4820" stroke-width="2.5"/>
+                  <line x1="150" y1="372" x2="157" y2="380" stroke="#7a4820" stroke-width="2.5"/>
+                  <line x1="150" y1="385" x2="146" y2="395" stroke="#7a4820" stroke-width="2.5"/>
+                  <line x1="150" y1="385" x2="154" y2="395" stroke="#7a4820" stroke-width="2.5"/>
+                </g>
+
+                <!-- Clouds (bright white) -->
+                <ellipse cx="65"  cy="112" rx="52" ry="17" fill="rgba(255,255,255,.88)" style="animation:vw-cloud 14s ease-in-out alternate infinite"/>
+                <ellipse cx="42"  cy="121" rx="32" ry="13" fill="rgba(255,255,255,.75)" style="animation:vw-cloud 14s ease-in-out alternate infinite"/>
+                <ellipse cx="92"  cy="120" rx="28" ry="12" fill="rgba(255,255,255,.75)" style="animation:vw-cloud 14s ease-in-out alternate infinite"/>
+                <ellipse cx="234" cy="100" rx="46" ry="15" fill="rgba(255,255,255,.82)" style="animation:vw-cloud 12s ease-in-out alternate infinite 2s"/>
+                <ellipse cx="215" cy="109" rx="28" ry="12" fill="rgba(255,255,255,.68)" style="animation:vw-cloud 12s ease-in-out alternate infinite 2s"/>
+
+                <!-- Birds -->
+                <g style="animation:vw-bird 9s linear infinite">
+                  <path d="M45,128 Q52,121 59,128" fill="none" stroke="#1a3a5a" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M63,125 Q70,118 77,125" fill="none" stroke="#1a3a5a" stroke-width="2" stroke-linecap="round"/>
+                </g>
+              </svg>
               <div class="overlay"><h3>Village Walks</h3><p>Meet artisans, farmers, and keepers of centuries-old stories rooted in the Kalimpong hills. Explore monasteries, vibrant local markets, and the rich living heritage of the region at an unhurried pace.</p></div>
             </article>
+
+            <!-- ── TILE 04: Sunrise Viewpoints ── golden Himalayan dawn -->
             <article class="experience-tile">
               <span class="exp-num">04</span>
-              <img src="images/D3959C11-D511-40E2-959C-565F2D90A2F6.jpeg" alt="Sunrise viewpoint from Kalimpong" loading="lazy"/>
+              <svg class="exp-svg-illustration" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <style>
+                  @keyframes sr-rise  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+                  @keyframes sr-ray   { 0%,100%{opacity:.5} 50%{opacity:1} }
+                  @keyframes sr-glow  { 0%,100%{opacity:.5} 50%{opacity:.9} }
+                  @keyframes sr-mist  { 0%,100%{opacity:.3;transform:translateX(0)} 50%{opacity:.55;transform:translateX(14px)} }
+                  @keyframes sr-cloud { 0%{transform:translateX(0)} 100%{transform:translateX(10px)} }
+                  @keyframes sr-leaf  { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+                  @keyframes sr-bird  { 0%{transform:translate(0,0)} 100%{transform:translate(52px,-10px)} }
+                </style>
+
+                <!-- Sky: rich pre-dawn purple → warm amber → golden horizon -->
+                <defs>
+                  <linearGradient id="sr-sky" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%"   stop-color="#18205a"/>
+                    <stop offset="25%"  stop-color="#5a2878"/>
+                    <stop offset="48%"  stop-color="#d84820"/>
+                    <stop offset="68%"  stop-color="#f09018"/>
+                    <stop offset="85%"  stop-color="#f8c840"/>
+                    <stop offset="100%" stop-color="#f8e070"/>
+                  </linearGradient>
+                </defs>
+                <rect width="300" height="400" fill="url(#sr-sky)"/>
+
+                <!-- Horizon glow (big, bright) -->
+                <ellipse cx="150" cy="248" rx="200" ry="75"  fill="rgba(255,170,50,.4)"  style="animation:sr-glow 3.5s ease-in-out infinite"/>
+                <ellipse cx="150" cy="260" rx="160" ry="55"  fill="rgba(255,200,80,.35)" style="animation:sr-glow 3.5s ease-in-out infinite .5s"/>
+                <ellipse cx="150" cy="270" rx="110" ry="38"  fill="rgba(255,220,100,.3)" style="animation:sr-glow 3.5s ease-in-out infinite 1s"/>
+                <ellipse cx="150" cy="278" rx="70"  ry="24"  fill="rgba(255,240,140,.25)" style="animation:sr-glow 2.8s ease-in-out infinite 1.5s"/>
+
+                <!-- Large bright SUN -->
+                <g style="transform-origin:150px 248px;animation:sr-rise 5s ease-in-out infinite">
+                  <ellipse cx="150" cy="248" rx="70" ry="70" fill="rgba(255,220,80,.22)" style="animation:sr-glow 3s ease-in-out infinite"/>
+                  <ellipse cx="150" cy="248" rx="52" ry="52" fill="rgba(255,210,70,.32)" style="animation:sr-glow 2.5s ease-in-out infinite .3s"/>
+                  <ellipse cx="150" cy="248" rx="38" ry="38" fill="rgba(255,200,60,.42)" style="animation:sr-glow 2s ease-in-out infinite .6s"/>
+                  <circle  cx="150" cy="248" r="26" fill="#f8e060"/>
+                  <circle  cx="150" cy="248" r="18" fill="#fff8a8"/>
+                  <!-- Rays -->
+                  <g style="animation:sr-ray 2s ease-in-out infinite">
+                    <line x1="150" y1="216" x2="150" y2="205" stroke="#f8d840" stroke-width="3.5" stroke-linecap="round"/>
+                    <line x1="150" y1="280" x2="150" y2="291" stroke="#f8d840" stroke-width="3.5" stroke-linecap="round"/>
+                    <line x1="118" y1="248" x2="107" y2="248" stroke="#f8d840" stroke-width="3.5" stroke-linecap="round"/>
+                    <line x1="182" y1="248" x2="193" y2="248" stroke="#f8d840" stroke-width="3.5" stroke-linecap="round"/>
+                    <line x1="127" y1="225" x2="119" y2="217" stroke="#f8d840" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="173" y1="225" x2="181" y2="217" stroke="#f8d840" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="127" y1="271" x2="119" y2="279" stroke="#f8d840" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="173" y1="271" x2="181" y2="279" stroke="#f8d840" stroke-width="3" stroke-linecap="round"/>
+                  </g>
+                </g>
+
+                <!-- Stars (top sky only, fading) -->
+                <circle cx="28"  cy="25" r="1.8" fill="rgba(255,255,255,.7)"/>
+                <circle cx="85"  cy="40" r="1.2" fill="rgba(255,255,255,.6)"/>
+                <circle cx="215" cy="28" r="1.8" fill="rgba(255,255,255,.6)"/>
+                <circle cx="272" cy="45" r="1.2" fill="rgba(255,255,255,.5)"/>
+                <circle cx="145" cy="18" r="1.2" fill="rgba(255,255,255,.55)"/>
+                <circle cx="52"  cy="58" r="1"   fill="rgba(255,255,255,.4)"/>
+                <circle cx="258" cy="65" r="1"   fill="rgba(255,255,255,.4)"/>
+
+                <!-- Kanchenjunga (warm-lit by sunrise, not dark) -->
+                <path d="M0,400 L0,282 L36,256 L70,265 L98,242 L122,254 L142,226 L160,240 L178,216 L196,232 L216,222 L236,238 L260,228 L284,242 L300,252 L300,400Z" fill="#5a3820"/>
+                <!-- Snow: warm golden lit -->
+                <path d="M142,226 L154,236 L160,240 L152,231 L142,226 L134,236 L122,254 L116,246Z" fill="rgba(255,248,200,.72)"/>
+                <path d="M178,216 L190,226 L196,232 L188,222 L178,216 L170,226 L160,240 L154,232Z" fill="rgba(255,248,200,.66)"/>
+                <path d="M216,222 L226,230 L236,238 L228,229 L216,222 L208,231 L198,238 L193,231Z" fill="rgba(255,248,200,.60)"/>
+
+                <!-- Mid ridge: warm amber -->
+                <path d="M0,400 L0,318 Q75,295 150,312 Q225,295 300,318 L300,400Z" fill="#4a2c14" opacity=".95"/>
+
+                <!-- Mist bands (warm) -->
+                <ellipse cx="150" cy="316" rx="200" ry="18" fill="rgba(255,220,140,.28)" style="animation:sr-mist 6s ease-in-out infinite"/>
+                <ellipse cx="75"  cy="322" rx="120" ry="12" fill="rgba(255,200,120,.18)" style="animation:sr-mist 8s ease-in-out infinite 1.2s"/>
+
+                <!-- Foreground dark hill -->
+                <path d="M0,400 L0,358 Q100,340 200,356 Q260,343 300,356 L300,400Z" fill="#1e1208"/>
+
+                <!-- Silhouette trees against sunrise -->
+                <g style="animation:sr-leaf 5s ease-in-out infinite .4s">
+                  <line x1="38"  y1="376" x2="38"  y2="344" stroke="#18200e" stroke-width="4.5"/>
+                  <ellipse cx="38"  cy="330" rx="24" ry="28" fill="#141a0a"/>
+                </g>
+                <g style="animation:sr-leaf 4.5s ease-in-out infinite 1.5s">
+                  <line x1="264" y1="376" x2="264" y2="346" stroke="#18200e" stroke-width="4.5"/>
+                  <ellipse cx="264" cy="332" rx="24" ry="28" fill="#141a0a"/>
+                </g>
+                <g style="animation:sr-leaf 4.8s ease-in-out infinite .8s">
+                  <line x1="15"  y1="384" x2="15"  y2="362" stroke="#18200e" stroke-width="3"/>
+                  <ellipse cx="15"  cy="352" rx="15" ry="20" fill="#101408"/>
+                </g>
+                <g style="animation:sr-leaf 5.2s ease-in-out infinite 1.2s">
+                  <line x1="287" y1="384" x2="287" y2="364" stroke="#18200e" stroke-width="3"/>
+                  <ellipse cx="287" cy="354" rx="15" ry="20" fill="#101408"/>
+                </g>
+
+                <!-- Clouds: warm sunrise-lit -->
+                <ellipse cx="55"  cy="162" rx="55" ry="16" fill="rgba(255,195,120,.5)"  style="animation:sr-cloud 14s ease-in-out alternate infinite"/>
+                <ellipse cx="32"  cy="172" rx="34" ry="12" fill="rgba(255,185,110,.4)"  style="animation:sr-cloud 14s ease-in-out alternate infinite"/>
+                <ellipse cx="244" cy="150" rx="50" ry="15" fill="rgba(255,195,120,.45)" style="animation:sr-cloud 12s ease-in-out alternate infinite 2s"/>
+                <ellipse cx="222" cy="160" rx="32" ry="11" fill="rgba(255,185,110,.36)" style="animation:sr-cloud 12s ease-in-out alternate infinite 2s"/>
+                <ellipse cx="150" cy="210" rx="44" ry="10" fill="rgba(255,210,130,.25)" style="animation:sr-cloud 10s ease-in-out alternate infinite 1s"/>
+
+                <!-- Silhouette birds -->
+                <g style="animation:sr-bird 10s linear infinite">
+                  <path d="M28,198 Q35,191 42,198" fill="none" stroke="rgba(20,10,4,.75)" stroke-width="2.2" stroke-linecap="round"/>
+                  <path d="M47,195 Q54,188 61,195" fill="none" stroke="rgba(20,10,4,.75)" stroke-width="2.2" stroke-linecap="round"/>
+                </g>
+              </svg>
               <div class="overlay"><h3>Sunrise Viewpoints</h3><p>Watch the first light paint Kanchenjunga's snow-clad peaks in shades of gold and rose on clear Himalayan mornings. Our exclusive viewpoints offer unobstructed panoramas that stay with you long after you leave.</p></div>
             </article>
+
           </div>
         </div>
       </section>
@@ -458,14 +836,13 @@
       <div class="footer-top container">
         <p class="footer-brand">Saipatri Homestay</p>
         <ul class="footer-links">
-          <li><a href="index.html">Home</a></li><li><a href="#experience">Experience</a></li>
-          <li><a href="#rooms">Rooms</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="rooms.html">Rooms</a></li>
           <li><a href="#experiences">Explore</a></li><li><a href="gallery.html">Gallery</a></li>
           <li><a href="about.html">About</a></li><li><a href="#contact">Book</a></li>
         </ul>
         <div class="social-links">
-          <a href="#" aria-label="Instagram">Instagram</a>
-          <a href="#" aria-label="Facebook">Facebook</a>
+          <a href="https://www.instagram.com/saipatrihomestay?igsh=d3A2cWhcXR2bWFs" target="_blank" aria-label="Instagram">Instagram</a>
         </div>
       </div>
       <div class="footer-bottom container">
