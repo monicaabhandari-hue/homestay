@@ -795,24 +795,63 @@
               <p class="eyebrow">Plan Your Visit</p>
               <h2>Book Your Stay</h2>
             </div>
-            <form class="booking-form" id="booking-form">
+            <form class="booking-form" id="booking-form"
+             action="https://formspree.io/f/mqewrygn" method="POST">
+
               <label for="name">Name</label>
               <input id="name" name="name" type="text" required placeholder="Your full name"/>
-              <label for="email">Email</label>
-              <input id="email" name="email" type="email" required placeholder="your@email.com"/>
+      
+              <!-- Email + Phone on the same row -->
+              <div class="field-row">
+                <div>
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" required placeholder="your@email.com"/>
+                </div>
+                <div>
+                  <label for="phone">Phone</label>
+                  <input id="phone" name="phone" type="tel" placeholder="+91 00000 00000"/>
+                </div>
+              </div>
+      
               <div class="field-row">
                 <div><label for="checkin">Arrival Date</label><input id="checkin" name="checkin" type="date" required/></div>
                 <div><label for="checkout">Departure Date</label><input id="checkout" name="checkout" type="date" required/></div>
               </div>
-              <label for="guests">Number of guests</label>
-              <input id="guests" name="guests" type="number" min="1" max="10" required placeholder="2"/>
+      
+              <!-- Room Type + Guests on the same row -->
+              <div class="field-row">
+                <div>
+                  <label for="room-type">Room Type</label>
+<select id="room-type" name="room-type" required>
+  <option value="" disabled selected>Select a room…</option>
+  <option value="standard">Standard Room</option>
+  <option value="deluxe">Deluxe Room</option>
+  <option value="family">Family Room</option>
+  <option value="mountain-view">Mountain View Room</option>
+  <option value="cozy">Cozy Room</option>
+  <option value="valley-view">Valley View Room</option>
+  <option value="premium">Premium Room</option>
+  <option value="suite">Suite Room</option>
+</select>
+                </div>
+                <div>
+                  <label for="guests">Number of Guests</label>
+                  <input id="guests" name="guests" type="number" min="1" max="10" required placeholder="2"/>
+                </div>
+              </div>
+      
               <label for="message">Message (optional)</label>
               <textarea id="message" name="message" rows="4" placeholder="Any special requests or questions…"></textarea>
-              <br/><br/>
+
+              <p class="booking-note">
+                This is a booking request. We will confirm availability via phone or email.
+              </p>
+            
               <button class="btn" type="submit">Send Enquiry</button>
               <p class="form-message" id="form-message" aria-live="polite"></p>
             </form>
           </div>
+
           <aside class="contact-info">
             <h3>Your Hosts — Babin &amp; Geeta</h3>
             <p>We welcome you to our home in Echhey, Kalimpong. Come as a guest, leave as family.</p>
@@ -830,7 +869,6 @@
           </aside>
         </div>
       </section>
-    </main>
 
     <footer class="site-footer">
       <div class="footer-top container">

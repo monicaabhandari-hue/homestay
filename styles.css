@@ -556,6 +556,27 @@
    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
    .form-message { margin-top: 1rem; color: var(--violet); font-size: .85rem; font-weight: 300; min-height: 1.4em; }
    
+   .booking-form select {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    border-bottom: 1px solid rgba(15,30,20,.15);
+    padding: .6rem 1.2rem .6rem 0;
+    font-family: var(--font-body);
+    font-size: .92rem;
+    font-weight: 300;
+    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23E8943A'/%3E%3C/svg%3E") no-repeat right .2rem center;
+    background-size: 9px 5px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color .3s;
+    color: inherit;
+  }
+  .booking-form select:focus { border-bottom-color: var(--amber); }
+  .booking-form select option { background: #fff; color: var(--indigo); }
+
+  
    .contact-info { background: var(--indigo); padding: 2.4rem; color: var(--fog); border-radius: 10px; }
    .contact-info h3 { color: var(--parch); font-weight: 600; margin-bottom: 1.2rem; }
    .contact-info p  { font-size: .88rem; font-weight: 200; color: rgba(232,240,248,.7); margin-bottom: .6rem; }
